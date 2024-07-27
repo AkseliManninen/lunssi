@@ -19,6 +19,6 @@ async def get_restaurant():
     return {
         "name": "Bruuveri",
         "lunchItems": [menu],
-        "lunchPrice": 12,
-        "lunchTime": "12:00 PM - 2:00 PM",
+        "lunchPrice": "13,50€ (Noutopöytä) - 12,30€ (Kevytlounas)",
+        "lunchTime": "10.30 - 13.30",
     }

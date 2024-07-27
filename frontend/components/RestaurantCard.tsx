@@ -3,7 +3,7 @@ import React from "react";
 interface RestaurantCardProps {
   name: string;
   lunchItems: string[];
-  lunchPrice: number;
+  lunchPrice: string;
   lunchTime: string;
 }
 
@@ -22,10 +22,10 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
             <li key={index}>{item}</li>
           ))}
         </ul>
+        <p className="text-gray-700 text-base">Hinta: {lunchPrice}</p>
         <p className="text-gray-700 text-base">
-          Lunch Price: ${lunchPrice.toFixed(2)}
+          Lounas saatavilla: {lunchTime}
         </p>
-        <p className="text-gray-700 text-base">Lunch Time: {lunchTime}</p>
       </div>
     </div>
   );

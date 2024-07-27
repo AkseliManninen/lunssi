@@ -5,7 +5,7 @@ import RestaurantCard from "../components/RestaurantCard";
 interface Restaurant {
   name: string;
   lunchItems: string[];
-  lunchPrice: number;
+  lunchPrice: string;
   lunchTime: string;
 }
 
