@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from get_menu import get_menu
 
 app = FastAPI()
 
@@ -14,9 +15,10 @@ app.add_middleware(
 
 @app.get("/restaurant")
 async def get_restaurant():
+    price = get_menu()
     return {
         "name": "Bruuveri",
         "lunchItems": ["Pizza", "Burger", "Salad"],
-        "lunchPrice": 15.99,
+        "lunchPrice": price,
         "lunchTime": "12:00 PM - 2:00 PM",
     }
