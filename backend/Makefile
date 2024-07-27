@@ -1,2 +1,2 @@
 run:
-	uvicorn main:app --reload --port 8080 
+	uvicorn main:app --reload --port 8000 

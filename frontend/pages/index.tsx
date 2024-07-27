@@ -1,10 +1,6 @@
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Inter } from "next/font/google";
 import axios from "axios";
 import RestaurantCard from "../components/RestaurantCard";
-
-const inter = Inter({ subsets: ["latin"] });
 
 interface Restaurant {
   name: string;
@@ -32,7 +28,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div>
       <h1 className="text-3xl font-bold my-8">Lunssi</h1>
       <RestaurantCard
         name={restaurant.name}
