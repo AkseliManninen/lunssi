@@ -15,10 +15,10 @@ app.add_middleware(
 
 @app.get("/restaurant")
 async def get_restaurant():
-    price = get_menu()
+    menu = get_menu()
     return {
         "name": "Bruuveri",
-        "lunchItems": ["Pizza", "Burger", "Salad"],
-        "lunchPrice": price,
+        "lunchItems": [menu],
+        "lunchPrice": 12,
         "lunchTime": "12:00 PM - 2:00 PM",
     }
