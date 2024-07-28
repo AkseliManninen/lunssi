@@ -1,8 +1,6 @@
 import requests
-
 from bs4 import BeautifulSoup
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 # Headers
 headers = {
@@ -13,20 +11,17 @@ headers = {
 url = "https://www.bruuveri.fi/lounas-menu/"
 
 def get_bruuveri_menu():
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an error for bad status codes
 
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
         html_content = response.content
         soup = BeautifulSoup(html_content, 'html.parser')
-        print(html_content)
         
         # Get current day and month
         specific_date = datetime.now() + timedelta(days=3)
         target_day = specific_date.day
         target_month = specific_date.month
-
-
         target_date_str = f"{target_day}.{target_month}."
 
         # Find the menu for the specific date
@@ -49,12 +44,15 @@ def get_bruuveri_menu():
             return "\n".join(menu_items)
         else:
             return f"No menu found for {target_date_str}."
-    else:
-        return f"Failed to retrieve the webpage. Status code: {response.status_code}"
+    except Exception as e:
+        return f"Failed to retrieve the menu. Error: {str(e)}"
 
-def get_menu():
-    menu = get_bruuveri_menu() 
-    return menu
+def get_menu(restaurant_name):
+    if restaurant_name == "bruuveri":
+        return get_bruuveri_menu()
+    else:
+        return "No menu yet for kansis"
 
 if __name__ == "__main__":
-    menu = get_menu()
+    menu = get_menu("bruuveri")
+    print(menu)

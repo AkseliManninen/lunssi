@@ -11,20 +11,34 @@ interface Restaurant {
 
 const Home: React.FC = () => {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const restaurantName = "bruuveri"; // Change to the actual restaurant name if needed
     axios
-      .get("http://localhost:8000/restaurant")
+      .get(`http://localhost:8000/restaurant?name=${restaurantName}`)
       .then((response) => {
         setRestaurant(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching the restaurant data:", error);
+        setError("Failed to load restaurant data");
+        setLoading(false);
       });
   }, []);
 
-  if (!restaurant) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!restaurant) {
+    return <div>No restaurant data available</div>;
   }
 
   return (
