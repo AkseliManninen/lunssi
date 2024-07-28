@@ -11,6 +11,7 @@ interface Restaurant {
 
 const Home: React.FC = () => {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
+  const [restaurant2, setRestaurant2] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,6 +21,21 @@ const Home: React.FC = () => {
       .get(`http://localhost:8000/restaurant?name=${restaurantName}`)
       .then((response) => {
         setRestaurant(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching the restaurant data:", error);
+        setError("Failed to load restaurant data");
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    const restaurantName2 = "kansis"; // Change to the actual restaurant name if needed
+    axios
+      .get(`http://localhost:8000/restaurant?name`)
+      .then((response) => {
+        setRestaurant2(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -52,10 +68,10 @@ const Home: React.FC = () => {
           lunchTime={restaurant.lunchTime}
         />
         <RestaurantCard
-          name={restaurant.name}
-          lunchItems={restaurant.lunchItems}
-          lunchPrice={restaurant.lunchPrice}
-          lunchTime={restaurant.lunchTime}
+          name={restaurant2.name}
+          lunchItems={restaurant2.lunchItems}
+          lunchPrice={restaurant2.lunchPrice}
+          lunchTime={restaurant2.lunchTime}
         />
       </div>
     </div>
