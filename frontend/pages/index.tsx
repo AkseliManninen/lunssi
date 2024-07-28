@@ -30,12 +30,20 @@ const Home: React.FC = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold my-8">Lunssi</h1>
-      <RestaurantCard
-        name={restaurant.name}
-        lunchItems={restaurant.lunchItems}
-        lunchPrice={restaurant.lunchPrice}
-        lunchTime={restaurant.lunchTime}
-      />
+      <div className="flex space-x-4">
+        <RestaurantCard
+          name={restaurant.name}
+          lunchItems={restaurant.lunchItems}
+          lunchPrice={restaurant.lunchPrice}
+          lunchTime={restaurant.lunchTime}
+        />
+        <RestaurantCard
+          name={restaurant.name}
+          lunchItems={restaurant.lunchItems}
+          lunchPrice={restaurant.lunchPrice}
+          lunchTime={restaurant.lunchTime}
+        />
+      </div>
     </div>
   );
 };
