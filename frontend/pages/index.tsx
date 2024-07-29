@@ -31,11 +31,11 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const restaurantName2 = "kansis"; // Change to the actual restaurant name if needed
+    const restaurantName = "bruuveri"; // Change to the actual restaurant name if needed
     axios
-      .get(`http://localhost:8000/restaurant?name`)
+      .get(`http://localhost:8000/restaurant?name=${restaurantName}`)
       .then((response) => {
-        setRestaurant2(response.data);
+        setRestaurant(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -68,10 +68,10 @@ const Home: React.FC = () => {
           lunchTime={restaurant.lunchTime}
         />
         <RestaurantCard
-          name={restaurant2.name}
-          lunchItems={restaurant2.lunchItems}
-          lunchPrice={restaurant2.lunchPrice}
-          lunchTime={restaurant2.lunchTime}
+          name={restaurant.name}
+          lunchItems={restaurant.lunchItems}
+          lunchPrice={restaurant.lunchPrice}
+          lunchTime={restaurant.lunchTime}
         />
       </div>
     </div>

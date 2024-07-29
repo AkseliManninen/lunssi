@@ -17,13 +17,13 @@ app.add_middleware(
 @app.get("/restaurant")
 async def get_restaurant(name: Optional[str] = "bruuveri"):
     try:
-        menu = get_lunch_info(name)
+        menu, lunch_price, lunch_available  = get_lunch_info(name)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
     return {
         "name": name.capitalize(),
         "lunchItems": [menu],
-        "lunchPrice": "13,50€ (Noutopöytä) - 12,30€ (Kevytlounas)",
-        "lunchTime": "10.30 - 13.30",
+        "lunchPrice": lunch_price,
+        "lunchTime": lunch_available,
     }
