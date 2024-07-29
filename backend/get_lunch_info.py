@@ -54,24 +54,28 @@ def get_bruuveri_lunch_info():
         return f"Failed to retrieve the menu. Error: {str(e)}"
     
 def get_kansis_lunch_info():
+    
     url = "https://ravintolakansis.fi/lounas/"
-    price = "12.70€"
+    lunch_price = "12.70€"
     lunch_available = "11:00 - 14:00"
+    menu = "Menu not defined for Kansis"
 
-    pass
+    return menu, lunch_price, lunch_available
+
 
 def get_plaza_lunch_info():
     url = "https://www.ardenrestaurants.fi/menut/plazatabletmenu.html"
-    price = "14.50€"
+    lunch_price = "14.50€"
     lunch_available = "10:30 - 14:00"
+    menu = "Menu not defined for Plaza"
 
-    pass
+    return menu, lunch_price, lunch_available
 
 def get_lunch_info(restaurant_name):
     if restaurant_name == "bruuveri":
         return get_bruuveri_lunch_info()
     else:
-        return "No menu yet"
+        return get_bruuveri_lunch_info()
 
 if __name__ == "__main__":
     get_lunch_info("bruuveri")

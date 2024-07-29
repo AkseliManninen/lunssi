@@ -31,11 +31,11 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const restaurantName = "bruuveri"; // Change to the actual restaurant name if needed
+    const restaurantName2 = "bruuveri"; // Change to the actual restaurant name if needed
     axios
-      .get(`http://localhost:8000/restaurant?name=${restaurantName}`)
+      .get(`http://localhost:8000/restaurant?name=${restaurantName2}`)
       .then((response) => {
-        setRestaurant(response.data);
+        setRestaurant2(response.data);
         setLoading(false);
       })
       .catch((error) => {
