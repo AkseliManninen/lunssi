@@ -7,10 +7,10 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
-# Bruuveri
-url = "https://www.bruuveri.fi/lounas-menu/"
+def get_bruuveri_lunch_info():
 
-def get_bruuveri_menu():
+    url = "https://www.bruuveri.fi/lounas-menu/"
+
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()  # Raise an error for bad status codes
@@ -47,18 +47,24 @@ def get_bruuveri_menu():
     except Exception as e:
         return f"Failed to retrieve the menu. Error: {str(e)}"
     
-def get_kansis_menu():
+def get_kansis_lunch_info():
+    
+    url = "https://ravintolakansis.fi/lounas/"
+
     pass
 
-def get_plaza_menu():
+def get_plaza_lunch_info():
+
+    url = "https://www.ardenrestaurants.fi/menut/plazatabletmenu.html"
+
     pass
 
-def get_menu(restaurant_name):
+def get_lunch_info(restaurant_name):
     if restaurant_name == "bruuveri":
-        return get_bruuveri_menu()
+        return get_bruuveri_lunch_info()
     else:
         return "No menu yet for kansis"
 
 if __name__ == "__main__":
-    menu = get_menu("bruuveri")
+    menu = get_lunch_info("bruuveri")
     print(menu)
