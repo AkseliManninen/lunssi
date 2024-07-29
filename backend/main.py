@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from get_menu import get_menu
+from get_lunch_info import get_lunch_info
 from typing import Optional
 
 app = FastAPI()
@@ -17,7 +17,7 @@ app.add_middleware(
 @app.get("/restaurant")
 async def get_restaurant(name: Optional[str] = "bruuveri"):
     try:
-        menu = get_menu(name)
+        menu = get_lunch_info(name)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
