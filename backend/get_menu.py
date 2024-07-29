@@ -46,6 +46,12 @@ def get_bruuveri_menu():
             return f"No menu found for {target_date_str}."
     except Exception as e:
         return f"Failed to retrieve the menu. Error: {str(e)}"
+    
+def get_kansis_menu():
+    pass
+
+def get_plaza_menu():
+    pass
 
 def get_menu(restaurant_name):
     if restaurant_name == "bruuveri":
