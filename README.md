@@ -1,6 +1,6 @@
-# lunssi
+# Lunssi
 
-# Development
+## Development
 
 ## Frontend
 TO-DO
