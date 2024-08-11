@@ -1,6 +1,7 @@
 import requests
+
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Headers
 headers = {
@@ -21,7 +22,7 @@ def get_bruuveri_lunch_info():
         soup = BeautifulSoup(html_content, 'html.parser')
         
         # Get current day and month
-        specific_date = datetime.now() + timedelta(days=3)
+        specific_date = datetime.now()
         target_day = specific_date.day
         target_month = specific_date.month
         target_date_str = f"{target_day}.{target_month}."
