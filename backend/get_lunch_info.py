@@ -72,6 +72,12 @@ def get_plaza_lunch_info():
 
     return menu, lunch_price, lunch_available
 
+def get_quem_lunch_info():
+    pass
+
+def get_pompier_albertinkatu_info():
+    pass
+
 def get_lunch_info(restaurant_name):
     if restaurant_name == "bruuveri":
         return get_bruuveri_lunch_info()
