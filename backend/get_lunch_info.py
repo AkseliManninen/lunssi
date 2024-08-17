@@ -4,38 +4,35 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from datetime import timedelta
 
-# Headers
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
+date = datetime.now() - timedelta(days=3)
+date_str = date.strftime("%-d.%-m")
+
+
+def fetch_html_content(url):
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.content
 
 
 def get_bruuveri_lunch_info():
-
     url = "https://www.bruuveri.fi/lounas-menu/"
     lunch_price = "13,50€ (Noutopöytä), 12,30€ (Kevytlounas)"
     lunch_available = "11:00 - 14:00"
 
     try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an error for bad status codes
-
-        html_content = response.content
+        html_content = fetch_html_content(url)
         soup = BeautifulSoup(html_content, 'html.parser')
-        
-        # Get current day and month
-        specific_date = datetime.now() + timedelta(days=3)
-        target_day = specific_date.day 
-        target_month = specific_date.month
-        target_date_str = f"{target_day}.{target_month}."
 
         # Find the menu for the specific date
         menu_items = []
         for menu in soup.find_all('div', class_='heading-text'):
             text = menu.get_text(strip=True)
             # Check if the text contains the target date
-            if target_date_str in text:
+            if date_str in text:
                 # Get the next sibling containing the menu items
                 next_sibling = menu.find_next('div', class_='vc_custom_heading_wrap')
                 while next_sibling:
@@ -50,32 +47,24 @@ def get_bruuveri_lunch_info():
             menu = "\n".join(menu_items)
 
         else:
-            menu = f"Lounasta ei saatavilla {target_date_str}"
+            menu = f"Lounasta ei saatavilla {date_str}"
         
         return menu, lunch_price, lunch_available
 
     except Exception as e:
         return f"Virhe: {str(e)}"
-    
+
+  
 def get_kansis_lunch_info():
-    
     url = "https://ravintolakansis.fi/lounas/"
     lunch_price = "12.70 - 14.20€"
     lunch_available = "11:00 - 14:00"
     menu = "Menu not defined for Kansis"
 
     try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an error for bad status codes
+        html_content = fetch_html_content(url)
 
-        html_content = response.content
         soup = BeautifulSoup(html_content, 'html.parser')
-
-        # Get current day and month
-        specific_date = datetime.now() - timedelta(days=3)
-        target_day = specific_date.day 
-        target_month = specific_date.month
-        target_date_str = f"{target_day}.{target_month}"
 
         menu = html_content
 
@@ -84,7 +73,7 @@ def get_kansis_lunch_info():
         for heading in soup.find_all('h3'):
             text = heading.get_text(strip=True)
             # Check if the text contains the target date
-            if target_date_str in text:
+            if date_str in text:
                 # Find the parent container that holds the h3 and its relevant siblings
                 parent_div = heading.find_parent()
                 next_sibling = heading.find_next_sibling()
@@ -96,9 +85,12 @@ def get_kansis_lunch_info():
 
         if menu_items:
             menu = "\n".join(menu_items)
-
         else:
-            menu = f"Lounasta ei saatavilla {target_date_str}"
+            menu = f"Lounasta ei saatavilla {date_str}"
+
+        # Split the menu by line breaks to ensure each item is separate
+        split_menu_items = menu.split("\n")
+
     
         return menu, lunch_price, lunch_available
     
@@ -107,7 +99,6 @@ def get_kansis_lunch_info():
 
 
 def get_plaza_lunch_info():
-    
     url = "https://www.ardenrestaurants.fi/menut/plazatabletmenu.html"
     lunch_price = "14.50€"
     lunch_available = "10:30 - 14:00"
@@ -120,12 +111,6 @@ def get_plaza_lunch_info():
         html_content = response.content
         soup = BeautifulSoup(html_content, 'html.parser')
 
-        # Get current day and month
-        specific_date = datetime.now()
-        target_day = specific_date.day
-        target_month = specific_date.month
-        target_date_str = f"{target_day}.{target_month}."
-
         # Muokkaa
         menu = "Ruokalista"
 
@@ -134,11 +119,14 @@ def get_plaza_lunch_info():
     except Exception as e:
         return f"Virhe: {str(e)}"
 
+
 def get_quem_lunch_info():
     pass
 
+
 def get_pompier_albertinkatu_info():
     pass
+
 
 def get_lunch_info(restaurant_name):
     if restaurant_name == "bruuveri":
@@ -146,6 +134,3 @@ def get_lunch_info(restaurant_name):
     
     elif restaurant_name == "kansis":
         return get_kansis_lunch_info()
-    
-    else:
-        return get_bruuveri_lunch_info()
