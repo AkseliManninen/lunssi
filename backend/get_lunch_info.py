@@ -47,12 +47,12 @@ def get_bruuveri_lunch_info():
             menu = "\n".join(menu_items)
 
         else:
-            menu = f"No menu found for {target_date_str}."
+            menu = f"Lounasta ei saatavilla {target_date_str}"
         
         return menu, lunch_price, lunch_available, 
 
     except Exception as e:
-        return f"Failed to retrieve the menu. Error: {str(e)}"
+        return f"Virhe: {str(e)}"
     
 def get_kansis_lunch_info():
     
@@ -65,12 +65,32 @@ def get_kansis_lunch_info():
 
 
 def get_plaza_lunch_info():
+    
     url = "https://www.ardenrestaurants.fi/menut/plazatabletmenu.html"
     lunch_price = "14.50€"
     lunch_available = "10:30 - 14:00"
     menu = "Menu not defined for Plaza"
 
-    return menu, lunch_price, lunch_available
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an error for bad status codes
+
+        html_content = response.content
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        # Get current day and month
+        specific_date = datetime.now()
+        target_day = specific_date.day
+        target_month = specific_date.month
+        target_date_str = f"{target_day}.{target_month}."
+
+        # Muokkaa
+        menu = "Ruokalista"
+
+        return menu, lunch_price, lunch_available
+
+    except Exception as e:
+        return f"Virhe: {str(e)}"
 
 def get_quem_lunch_info():
     pass
@@ -81,6 +101,10 @@ def get_pompier_albertinkatu_info():
 def get_lunch_info(restaurant_name):
     if restaurant_name == "bruuveri":
         return get_bruuveri_lunch_info()
+    
+    elif restaurant_name == "kansis":
+        return get_kansis_lunch_info()
+    
     else:
         return get_bruuveri_lunch_info()
 

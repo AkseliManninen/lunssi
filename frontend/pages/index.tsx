@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const restaurantName = "bruuveri"; // Change to the actual restaurant name if needed
+    const restaurantName = "bruuveri";
     axios
       .get(`http://localhost:8000/restaurant?name=${restaurantName}`)
       .then((response) => {
@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const restaurantName2 = "bruuveri"; // Change to the actual restaurant name if needed
+    const restaurantName2 = "kansis";
     axios
       .get(`http://localhost:8000/restaurant?name=${restaurantName2}`)
       .then((response) => {
@@ -46,33 +46,33 @@ const Home: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Ladataan lounaita</div>;
   }
 
   if (error) {
     return <div>{error}</div>;
   }
 
-  if (!restaurant) {
-    return <div>No restaurant data available</div>;
-  }
-
   return (
     <div>
       <h1 className="text-3xl font-bold my-8">Lunssi</h1>
       <div className="flex space-x-4">
-        <RestaurantCard
-          name={restaurant.name}
-          lunchItems={restaurant.lunchItems}
-          lunchPrice={restaurant.lunchPrice}
-          lunchTime={restaurant.lunchTime}
-        />
-        <RestaurantCard
-          name={restaurant.name}
-          lunchItems={restaurant.lunchItems}
-          lunchPrice={restaurant.lunchPrice}
-          lunchTime={restaurant.lunchTime}
-        />
+        {restaurant && (
+          <RestaurantCard
+            name={restaurant.name}
+            lunchItems={restaurant.lunchItems}
+            lunchPrice={restaurant.lunchPrice}
+            lunchTime={restaurant.lunchTime}
+          />
+        )}
+        {restaurant2 && (
+          <RestaurantCard
+            name={restaurant2.name}
+            lunchItems={restaurant2.lunchItems}
+            lunchPrice={restaurant2.lunchPrice}
+            lunchTime={restaurant2.lunchTime}
+          />
+        )}
       </div>
     </div>
   );
