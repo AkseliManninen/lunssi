@@ -8,7 +8,7 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
 
-date = datetime.now() - timedelta(days=3)
+date = datetime.now() + timedelta(days=3)
 date_str = date.strftime("%-d.%-m")
 
 
@@ -134,27 +134,26 @@ def get_pompier_albertinkatu_lunch_info():
 
         menu = html_content
 
-        # Find the menu for the specific date
-        menu_items = []
-        for heading in soup.find_all('h3'):
-            text = heading.get_text(strip=True)
-            # Check if the text contains the target date
-            if date_str in text:
-                # Find the parent container that holds the h3 and its relevant siblings
-                parent_div = heading.find_parent()
-                next_sibling = heading.find_next_sibling()
-                while next_sibling and next_sibling in parent_div:
-                    menu_text = next_sibling.get_text(separator="\n", strip=True)
-                    menu_items.append(menu_text)
-                    next_sibling = next_sibling.find_next_sibling()
-                break
+        # Find all the accordion items
+        accordion_items = soup.find_all('div', class_='fl-accordion-item')
+
+        # Extract and print the menu details for each day
+        menu_details = {}
+        for item in accordion_items:
+            day = item.find('a', class_='fl-accordion-button-label').text.strip()
+            menu = item.find('div', class_='fl-accordion-content').find('p').text.strip()
+            menu_details[day] = menu
+
+        # Print the extracted menu details
+        for day, menu in menu_details.items():
+            if date_str in day:
+                menu_items = menu
 
         if menu_items:
             menu = "\n".join(menu_items)
         else:
             menu = f"Lounasta ei saatavilla {date_str}"
 
-    
         return menu, lunch_price, lunch_available
     
     except Exception as e:
