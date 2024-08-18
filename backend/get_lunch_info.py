@@ -88,9 +88,6 @@ def get_kansis_lunch_info():
         else:
             menu = f"Lounasta ei saatavilla {date_str}"
 
-        # Split the menu by line breaks to ensure each item is separate
-        split_menu_items = menu.split("\n")
-
     
         return menu, lunch_price, lunch_available
     
@@ -124,8 +121,44 @@ def get_quem_lunch_info():
     pass
 
 
-def get_pompier_albertinkatu_info():
-    pass
+def get_pompier_albertinkatu_lunch_info():
+    url = "https://pompier.fi/albertinkatu/albertinkatu-menu/"
+    lunch_price = "14 - 19€"
+    menu = "Menu not defined for Pompier Albertinkatu"
+    lunch_available = "10:45 - 14:00 Arkisin"
+
+    try:
+        html_content = fetch_html_content(url)
+
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        menu = html_content
+
+        # Find the menu for the specific date
+        menu_items = []
+        for heading in soup.find_all('h3'):
+            text = heading.get_text(strip=True)
+            # Check if the text contains the target date
+            if date_str in text:
+                # Find the parent container that holds the h3 and its relevant siblings
+                parent_div = heading.find_parent()
+                next_sibling = heading.find_next_sibling()
+                while next_sibling and next_sibling in parent_div:
+                    menu_text = next_sibling.get_text(separator="\n", strip=True)
+                    menu_items.append(menu_text)
+                    next_sibling = next_sibling.find_next_sibling()
+                break
+
+        if menu_items:
+            menu = "\n".join(menu_items)
+        else:
+            menu = f"Lounasta ei saatavilla {date_str}"
+
+    
+        return menu, lunch_price, lunch_available
+    
+    except Exception as e:
+        return f"Virhe: {str(e)}"
 
 
 def get_lunch_info(restaurant_name):
@@ -134,3 +167,6 @@ def get_lunch_info(restaurant_name):
     
     elif restaurant_name == "kansis":
         return get_kansis_lunch_info()
+    
+    elif restaurant_name == "pompier-albertinkatu":
+        return get_pompier_albertinkatu_lunch_info()
