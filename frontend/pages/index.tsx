@@ -9,6 +9,9 @@ interface Restaurant {
   lunchTime: string;
 }
 
+//const apiUrl = "http://localhost:8080";
+const apiUrl = "https://lunssi-backend.fly.dev";
+
 const Home: React.FC = () => {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [restaurant2, setRestaurant2] = useState<Restaurant | null>(null);
@@ -19,7 +22,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const restaurantName = "bruuveri";
     axios
-      .get(`http://localhost:8000/restaurant?name=${restaurantName}`)
+      .get(`${apiUrl}/restaurant?name=${restaurantName}`)
       .then((response) => {
         setRestaurant(response.data);
         setLoading(false);
@@ -34,7 +37,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const restaurantName2 = "kansis";
     axios
-      .get(`http://localhost:8000/restaurant?name=${restaurantName2}`)
+      .get(`${apiUrl}/restaurant?name=${restaurantName2}`)
       .then((response) => {
         setRestaurant2(response.data);
         setLoading(false);
@@ -49,7 +52,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const restaurantName3 = "pompier-albertinkatu";
     axios
-      .get(`http://localhost:8000/restaurant?name=${restaurantName3}`)
+      .get(`${apiUrl}/restaurant?name=${restaurantName3}`)
       .then((response) => {
         setRestaurant3(response.data);
         setLoading(false);

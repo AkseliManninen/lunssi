@@ -14,6 +14,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def hello_fly():
+    return 'hello from fly.io'
+
 @app.get("/restaurant")
 async def get_restaurant(name: Optional[str] = "bruuveri"):
     try:
