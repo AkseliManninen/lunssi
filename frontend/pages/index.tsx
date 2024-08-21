@@ -9,9 +9,11 @@ interface Restaurant {
   lunchTime: string;
 }
 
+// These should be added to an .env file
 //const apiUrl = "http://localhost:8080";
 const apiUrl = "https://lunssi-backend.fly.dev";
 
+// This data structure is bad - need to figure a way to make it cleaner
 const Home: React.FC = () => {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [restaurant2, setRestaurant2] = useState<Restaurant | null>(null);
