@@ -16,7 +16,7 @@ The backend of the application is built with Python and FastAPI. The backend run
 
 ### Starting the backend
 
-The backend runs locally on port 8080 using uvicorn. Starting the backend can be triggered with make.py using make run.
+The backend runs locally on port 8080 using uvicorn. Starting the backend can be triggered with make.py using command `make run`.
 
 ### Creating a virtual environment
 
