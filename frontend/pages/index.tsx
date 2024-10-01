@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import axios from "axios";
 import RestaurantCard from "../components/RestaurantCard";
 
@@ -9,99 +9,45 @@ interface Restaurant {
   lunchTime: string;
 }
 
-// These should be added to an .env file
-//const apiUrl = "http://localhost:8080";
-const apiUrl = "https://lunssi-backend.fly.dev";
+interface HomeProps {
+  restaurants: Restaurant[];
+  error: string | null;
+}
 
-// This data structure is bad - need to figure a way to make it cleaner
-const Home: React.FC = () => {
-  const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
-  const [restaurant2, setRestaurant2] = useState<Restaurant | null>(null);
-  const [restaurant3, setRestaurant3] = useState<Restaurant | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+const apiUrl = process.env.BACKEND_API_URL;
 
-  useEffect(() => {
-    const restaurantName = "bruuveri";
-    axios
-      .get(`${apiUrl}/restaurant?name=${restaurantName}`)
-      .then((response) => {
-        setRestaurant(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching the restaurant data:", error);
-        setError("Failed to load restaurant data");
-        setLoading(false);
-      });
-  }, []);
+export const getStaticProps = async () => {
+  const restaurantNames = ["bruuveri", "kansis", "pompier-albertinkatu"];
 
-  useEffect(() => {
-    const restaurantName2 = "kansis";
-    axios
-      .get(`${apiUrl}/restaurant?name=${restaurantName2}`)
-      .then((response) => {
-        setRestaurant2(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching the restaurant data:", error);
-        setError("Failed to load restaurant data");
-        setLoading(false);
-      });
-  }, []);
+  const restaurantData = await Promise.all(
+    restaurantNames.map((name) =>
+      axios
+        .get(`${apiUrl}/restaurant?name=${name}`)
+        .then((response) => response.data),
+    ),
+  );
+  return {
+    props: {
+      restaurants: restaurantData,
+    },
+    revalidate: 12 * 60 * 60, // 12 hours in seconds
+  };
+};
 
-  useEffect(() => {
-    const restaurantName3 = "pompier-albertinkatu";
-    axios
-      .get(`${apiUrl}/restaurant?name=${restaurantName3}`)
-      .then((response) => {
-        setRestaurant3(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching the restaurant data:", error);
-        setError("Failed to load restaurant data");
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <div>Ladataan lounaita</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
+const Home: React.FC<HomeProps> = ({ restaurants }) => {
   return (
     <div>
       <h1 className="text-3xl font-bold my-8">Lunssi</h1>
       <div className="flex space-x-4">
-        {restaurant && (
+        {restaurants.map((restaurant, index) => (
           <RestaurantCard
+            key={index}
             name={restaurant.name}
             lunchItems={restaurant.lunchItems}
             lunchPrice={restaurant.lunchPrice}
             lunchTime={restaurant.lunchTime}
           />
-        )}
-        {restaurant2 && (
-          <RestaurantCard
-            name={restaurant2.name}
-            lunchItems={restaurant2.lunchItems}
-            lunchPrice={restaurant2.lunchPrice}
-            lunchTime={restaurant2.lunchTime}
-          />
-        )}
-        {restaurant3 && (
-          <RestaurantCard
-            name={restaurant3.name}
-            lunchItems={restaurant3.lunchItems}
-            lunchPrice={restaurant3.lunchPrice}
-            lunchTime={restaurant3.lunchTime}
-          />
-        )}
+        ))}
       </div>
     </div>
   );
