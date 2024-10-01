@@ -16,7 +16,7 @@ interface HomeProps {
 
 export const getStaticProps = async () => {
   const restaurantNames = [
-    "bruuveri",
+    // "bruuveri", - Bruuveri denies our client with 443
     "kansis",
     "pompier-albertinkatu",
     "hämis",
@@ -26,8 +26,8 @@ export const getStaticProps = async () => {
     restaurantNames.map((name) =>
       axios
         .get(`${process.env.BACKEND_API_URL}/restaurant?name=${name}`)
-        .then((response) => response.data),
-    ),
+        .then((response) => response.data)
+    )
   );
   return {
     props: {
