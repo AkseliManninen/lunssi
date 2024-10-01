@@ -20,7 +20,7 @@ def fetch_html_content(url):
 
 def get_bruuveri_lunch_info():
     url = "https://www.bruuveri.fi/lounas-menu/"
-    lunch_price = "13,50€ (Noutopöytä), 12,30€ (Kevytlounas)"
+    lunch_price = "14,50€ (Noutopöytä), 13€ (Kevytlounas)"
     lunch_available = "11:00 - 14:00"
 
     try:
@@ -150,7 +150,7 @@ def get_pompier_albertinkatu_lunch_info():
                 menu_items = menu
 
         if menu_items:
-            menu = "\n".join(menu_items)
+            menu = "".join(menu_items)
         else:
             menu = f"Lounasta ei saatavilla {date_str}"
 
