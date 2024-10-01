@@ -1,80 +1,80 @@
 import requests
-
 from bs4 import BeautifulSoup
 from datetime import datetime
-from datetime import timedelta
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-}
-
-date = datetime.now()
-date_str = date.strftime("%-d.%-m")
 
 
-def fetch_html_content(url):
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    return response.content
+class RestaurantScraper:
+    def __init__(self, name, url, lunch_price, lunch_available):
+        self.name = name
+        self.url = url
+        self.lunch_price = lunch_price
+        self.lunch_available = lunch_available
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+        }
+        self.date_str = datetime.now().strftime("%-d.%-m")
+
+    def fetch_html_content(self):
+        response = requests.get(self.url, headers=self.headers)
+        response.raise_for_status()
+        return response.content
+
+    def get_lunch_info(self):
+        try:
+            html_content = self.fetch_html_content()
+            soup = BeautifulSoup(html_content, "html.parser")
+            menu = self.parse_menu(soup)
+            return menu, self.lunch_price, self.lunch_available
+        except Exception as e:
+            return f"Virhe: {str(e)}"
 
 
-def get_bruuveri_lunch_info():
-    url = "https://www.bruuveri.fi/lounas-menu/"
-    lunch_price = "14,50€ (Noutopöytä), 13€ (Kevytlounas)"
-    lunch_available = "11:00 - 14:00"
+class BruuveriScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Bruuveri",
+            "https://www.bruuveri.fi/lounas-menu/",
+            "14,50€ (Noutopöytä), 13€ (Kevytlounas)",
+            "11:00 - 14:00",
+        )
 
-    try:
-        html_content = fetch_html_content(url)
-        soup = BeautifulSoup(html_content, 'html.parser')
-
-        # Find the menu for the specific date
+    def parse_menu(self, soup):
         menu_items = []
-        for menu in soup.find_all('div', class_='heading-text'):
+        for menu in soup.find_all("div", class_="heading-text"):
             text = menu.get_text(strip=True)
-            # Check if the text contains the target date
-            if date_str in text:
-                # Get the next sibling containing the menu items
-                next_sibling = menu.find_next('div', class_='vc_custom_heading_wrap')
+            if self.date_str in text:
+                next_sibling = menu.find_next("div", class_="vc_custom_heading_wrap")
                 while next_sibling:
                     menu_text = next_sibling.get_text(separator="\n", strip=True)
                     if any(char.isdigit() for char in menu_text):
                         break
                     menu_items.append(menu_text)
-                    next_sibling = next_sibling.find_next('div', class_='vc_custom_heading_wrap')
+                    next_sibling = next_sibling.find_next(
+                        "div", class_="vc_custom_heading_wrap"
+                    )
                 break
 
-        if menu_items:
-            menu = "\n".join(menu_items)
+        return (
+            "\n".join(menu_items)
+            if menu_items
+            else f"Lounasta ei saatavilla {self.date_str}"
+        )
 
-        else:
-            menu = f"Lounasta ei saatavilla {date_str}"
-        
-        return menu, lunch_price, lunch_available
 
-    except Exception as e:
-        return f"Virhe: {str(e)}"
+class KansisScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Kansis",
+            "https://ravintolakansis.fi/lounas/",
+            "12.70 - 14.20€",
+            "11:00 - 14:00",
+        )
 
-  
-def get_kansis_lunch_info():
-    url = "https://ravintolakansis.fi/lounas/"
-    lunch_price = "12.70 - 14.20€"
-    lunch_available = "11:00 - 14:00"
-    menu = "Menu not defined for Kansis"
-
-    try:
-        html_content = fetch_html_content(url)
-
-        soup = BeautifulSoup(html_content, 'html.parser')
-
-        menu = html_content
-
-        # Find the menu for the specific date
+    def parse_menu(self, soup):
         menu_items = []
-        for heading in soup.find_all('h3'):
+        for heading in soup.find_all("h3"):
             text = heading.get_text(strip=True)
-            # Check if the text contains the target date
-            if date_str in text:
-                # Find the parent container that holds the h3 and its relevant siblings
+            if self.date_str in text:
                 parent_div = heading.find_parent()
                 next_sibling = heading.find_next_sibling()
                 while next_sibling and next_sibling in parent_div:
@@ -83,89 +83,67 @@ def get_kansis_lunch_info():
                     next_sibling = next_sibling.find_next_sibling()
                 break
 
-        if menu_items:
-            menu = "\n".join(menu_items)
-        else:
-            menu = f"Lounasta ei saatavilla {date_str}"
-
-    
-        return menu, lunch_price, lunch_available
-    
-    except Exception as e:
-        return f"Virhe: {str(e)}"
+        return (
+            "\n".join(menu_items)
+            if menu_items
+            else f"Lounasta ei saatavilla {self.date_str}"
+        )
 
 
-def get_plaza_lunch_info():
-    url = "https://www.ardenrestaurants.fi/menut/plazatabletmenu.html"
-    lunch_price = "14.50€"
-    lunch_available = "10:30 - 14:00"
-    menu = "Menu not defined for Plaza"
+class PompierAlbertinkatuScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Pompier Albertinkatu",
+            "https://pompier.fi/albertinkatu/albertinkatu-menu/",
+            "14 - 19€",
+            "10:45 - 14:00 Arkisin",
+        )
 
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an error for bad status codes
-
-        html_content = response.content
-        soup = BeautifulSoup(html_content, 'html.parser')
-
-        # Muokkaa
-        menu = "Ruokalista"
-
-        return menu, lunch_price, lunch_available
-
-    except Exception as e:
-        return f"Virhe: {str(e)}"
-
-
-def get_quem_lunch_info():
-    pass
-
-
-def get_pompier_albertinkatu_lunch_info():
-    url = "https://pompier.fi/albertinkatu/albertinkatu-menu/"
-    lunch_price = "14 - 19€"
-    menu = "Menu not defined for Pompier Albertinkatu"
-    lunch_available = "10:45 - 14:00 Arkisin"
-
-    try:
-        html_content = fetch_html_content(url)
-
-        soup = BeautifulSoup(html_content, 'html.parser')
-
-        menu = html_content
-
-        # Find all the accordion items
-        accordion_items = soup.find_all('div', class_='fl-accordion-item')
-
-        # Extract and print the menu details for each day
+    def parse_menu(self, soup):
+        accordion_items = soup.find_all("div", class_="fl-accordion-item")
         menu_details = {}
         for item in accordion_items:
-            day = item.find('a', class_='fl-accordion-button-label').text.strip()
-            menu = item.find('div', class_='fl-accordion-content').find('p').text.strip()
+            day = item.find("a", class_="fl-accordion-button-label").text.strip()
+            menu = (
+                item.find("div", class_="fl-accordion-content").find("p").text.strip()
+            )
             menu_details[day] = menu
 
-        # Print the extracted menu details
-        for day, menu in menu_details.items():
-            if date_str in day:
-                menu_items = menu
+        menu_items = next(
+            (menu for day, menu in menu_details.items() if self.date_str in day), None
+        )
+        return menu_items if menu_items else f"Lounasta ei saatavilla {self.date_str}"
 
-        if menu_items:
-            menu = "".join(menu_items)
+
+class HamisScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Hämis",
+            "https://hys.net/osakuntabaari/ruokalista/",
+            "2,95€",
+            "11:00 - 15:00",
+        )
+
+    def parse_menu(self, soup):
+        today_row = soup.find("div", class_="row row-today")
+        if today_row:
+            menu_items = (
+                today_row.find("div", class_="col-food").text.strip().split("\n")
+            )
+            return "\n".join(menu_items)
         else:
-            menu = f"Lounasta ei saatavilla {date_str}"
-
-        return menu, lunch_price, lunch_available
-    
-    except Exception as e:
-        return f"Virhe: {str(e)}"
+            return "Today's menu not found."
 
 
 def get_lunch_info(restaurant_name):
-    if restaurant_name == "bruuveri":
-        return get_bruuveri_lunch_info()
-    
-    elif restaurant_name == "kansis":
-        return get_kansis_lunch_info()
-    
-    elif restaurant_name == "pompier-albertinkatu":
-        return get_pompier_albertinkatu_lunch_info()
+    scrapers = {
+        "bruuveri": BruuveriScraper(),
+        "kansis": KansisScraper(),
+        "pompier-albertinkatu": PompierAlbertinkatuScraper(),
+        "hämis": HamisScraper(),
+    }
+    scraper = scrapers.get(restaurant_name.lower())
+    if scraper:
+        return scraper.get_lunch_info()
+    else:
+        return f"No scraper found for restaurant: {restaurant_name}"
