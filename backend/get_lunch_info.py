@@ -10,7 +10,7 @@ class RestaurantScraper:
         self.lunch_price = lunch_price
         self.lunch_available = lunch_available
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+            "User-Agent": "Mozilla/5.0"
         }
         self.date_str = datetime.now().strftime("%-d.%-m")
 

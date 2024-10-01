@@ -1,9 +1,13 @@
-from fastapi import FastAPI, HTTPException
+import logging
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from get_lunch_info import get_lunch_info
 from typing import Optional
 
 app = FastAPI()
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Add CORS middleware to allow requests from the frontend
 app.add_middleware(
@@ -16,14 +20,16 @@ app.add_middleware(
 
 @app.get("/")
 async def hello_fly():
-    return 'hello from fly.io'
+    return "Lunssin bäkkäri"
 
 @app.get("/restaurant")
-async def get_restaurant(name: Optional[str] = "bruuveri"):
+async def get_restaurant(name: Optional[str]):
     try:
-        menu, lunch_price, lunch_available  = get_lunch_info(name)
+        res = get_lunch_info(name)
+        menu, lunch_price, lunch_available, *extra = res
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logging.error(f"Error getting lunch info for {name}: {e}")
+        menu, lunch_price, lunch_available = f"Virhe {name}: {e}", 0, 0 
 
     return {
         "name": name.capitalize(),
