@@ -17,7 +17,12 @@ interface HomeProps {
 const apiUrl = process.env.BACKEND_API_URL;
 
 export const getStaticProps = async () => {
-  const restaurantNames = ["bruuveri", "kansis", "pompier-albertinkatu"];
+  const restaurantNames = [
+    "bruuveri",
+    "kansis",
+    "pompier-albertinkatu",
+    "hämis",
+  ];
 
   const restaurantData = await Promise.all(
     restaurantNames.map((name) =>
@@ -36,9 +41,9 @@ export const getStaticProps = async () => {
 
 const Home: React.FC<HomeProps> = ({ restaurants }) => {
   return (
-    <div>
+    <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-8">Lunssi</h1>
-      <div className="flex space-x-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {restaurants.map((restaurant, index) => (
           <RestaurantCard
             key={index}
