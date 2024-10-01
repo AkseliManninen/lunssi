@@ -14,8 +14,6 @@ interface HomeProps {
   error: string | null;
 }
 
-const apiUrl = process.env.BACKEND_API_URL;
-
 export const getStaticProps = async () => {
   const restaurantNames = [
     "bruuveri",
@@ -27,7 +25,7 @@ export const getStaticProps = async () => {
   const restaurantData = await Promise.all(
     restaurantNames.map((name) =>
       axios
-        .get(`${apiUrl}/restaurant?name=${name}`)
+        .get(`${process.env.BACKEND_API_URL}/restaurant?name=${name}`)
         .then((response) => response.data),
     ),
   );
