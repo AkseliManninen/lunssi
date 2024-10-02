@@ -1,20 +1,8 @@
 import React from "react";
 import axios from "axios";
-import RestaurantCard from "../components/RestaurantCard";
+import RestaurantCard from "@/components/RestaurantCard";
 
-interface Restaurant {
-  name: string;
-  lunchItems: string[];
-  lunchPrice: string;
-  lunchTime: string;
-}
-
-interface HomeProps {
-  restaurants: Restaurant[];
-  error: string | null;
-}
-
-export const getStaticProps = async () => {
+const getRestaurantData = async () => {
   const restaurantNames = [
     // "bruuveri", - Bruuveri denies our client with 443
     "kansis",
@@ -26,18 +14,17 @@ export const getStaticProps = async () => {
     restaurantNames.map((name) =>
       axios
         .get(`${process.env.BACKEND_API_URL}/restaurant?name=${name}`)
-        .then((response) => response.data)
-    )
+        .then((response) => response.data),
+    ),
   );
-  return {
-    props: {
-      restaurants: restaurantData,
-    },
-    revalidate: 12 * 60 * 60, // 12 hours in seconds
-  };
+  return restaurantData;
 };
 
-const Home: React.FC<HomeProps> = ({ restaurants }) => {
+// 12 hours
+export const revalidate = 43200;
+
+const Home = async () => {
+  const restaurants = await getRestaurantData();
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-8">Lunssi</h1>
