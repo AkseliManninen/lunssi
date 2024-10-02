@@ -9,9 +9,7 @@ class RestaurantScraper:
         self.url = url
         self.lunch_price = lunch_price
         self.lunch_available = lunch_available
-        self.headers = {
-            "User-Agent": "Mozilla/5.0"
-        }
+        self.headers = {"User-Agent": "Mozilla/5.0"}
         self.date_str = datetime.now().strftime("%-d.%-m")
 
     def fetch_html_content(self):
@@ -54,11 +52,7 @@ class BruuveriScraper(RestaurantScraper):
                     )
                 break
 
-        return (
-            "\n".join(menu_items)
-            if menu_items
-            else f"Lounasta ei saatavilla {self.date_str}"
-        )
+        return menu_items if menu_items else f"Lounasta ei saatavilla {self.date_str}"
 
 
 class KansisScraper(RestaurantScraper):
@@ -79,15 +73,12 @@ class KansisScraper(RestaurantScraper):
                 next_sibling = heading.find_next_sibling()
                 while next_sibling and next_sibling in parent_div:
                     menu_text = next_sibling.get_text(separator="\n", strip=True)
-                    menu_items.append(menu_text)
+                    if menu_text:
+                        menu_items.append(menu_text)
                     next_sibling = next_sibling.find_next_sibling()
                 break
 
-        return (
-            "\n".join(menu_items)
-            if menu_items
-            else f"Lounasta ei saatavilla {self.date_str}"
-        )
+        return menu_items if menu_items else f"Lounasta ei saatavilla {self.date_str}"
 
 
 class PompierAlbertinkatuScraper(RestaurantScraper):
@@ -104,13 +95,19 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
         menu_details = {}
         for item in accordion_items:
             day = item.find("a", class_="fl-accordion-button-label").text.strip()
-            menu = (
-                item.find("div", class_="fl-accordion-content").find("p").text.strip()
-            )
-            menu_details[day] = menu
+            menu_content = item.find("div", class_="fl-accordion-content").find("p")
+            menu_html = str(menu_content)
+            menu_items = [
+                item.strip() for item in menu_html.split("<br/>") if item.strip()
+            ]
+            menu_items = [
+                BeautifulSoup(item, "html.parser").text for item in menu_items
+            ]
+            menu_details[day] = menu_items
 
         menu_items = next(
-            (menu for day, menu in menu_details.items() if self.date_str in day), None
+            (menu for day, menu in menu_details.items() if self.date_str in day),
+            None,
         )
         return menu_items if menu_items else f"Lounasta ei saatavilla {self.date_str}"
 
@@ -127,10 +124,15 @@ class HamisScraper(RestaurantScraper):
     def parse_menu(self, soup):
         today_row = soup.find("div", class_="row row-today")
         if today_row:
-            menu_items = (
-                today_row.find("div", class_="col-food").text.strip().split("\n")
-            )
-            return "\n".join(menu_items)
+            menu_div = today_row.find("div", class_="col-food")
+            menu_html = str(menu_div.p)
+            menu_items = [
+                item.strip() for item in menu_html.split("<br/>") if item.strip()
+            ]
+            menu_items = [
+                BeautifulSoup(item, "html.parser").text for item in menu_items
+            ]
+            return menu_items
         else:
             return "Today's menu not found."
 
