@@ -33,7 +33,7 @@ async def get_restaurant(name: Optional[str]):
 
     return {
         "name": name.capitalize(),
-        "lunchItems": [menu],
+        "lunchItems": menu,
         "lunchPrice": lunch_price,
         "lunchTime": lunch_available,
     }
