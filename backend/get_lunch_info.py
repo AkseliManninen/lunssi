@@ -1,21 +1,25 @@
 import requests
+
 from bs4 import BeautifulSoup
 from datetime import datetime
 
 
 class RestaurantScraper:
     def __init__(self, name, url, lunch_price, lunch_available):
-        self.name = name
-        self.url = url
-        self.lunch_price = lunch_price
-        self.lunch_available = lunch_available
-        self.headers = {"User-Agent": "Mozilla/5.0"}
         self.date_str = datetime.now().strftime("%-d.%-m")
+        self.fallback_menu = [f"Tämän päivän lounasta ei löytynyt."]
+        self.headers = {"User-Agent": "Mozilla/5.0"}
+        self.name = name
+        self.lunch_available = lunch_available
+        self.lunch_price = lunch_price
+        self.url = url
+
 
     def fetch_html_content(self):
         response = requests.get(self.url, headers=self.headers)
         response.raise_for_status()
         return response.content
+
 
     def get_lunch_info(self):
         try:
@@ -52,7 +56,7 @@ class BruuveriScraper(RestaurantScraper):
                     )
                 break
 
-        return menu_items if menu_items else f"Lounasta ei saatavilla {self.date_str}"
+        return menu_items if menu_items else self.fallback_menu
 
 
 class KansisScraper(RestaurantScraper):
@@ -78,7 +82,7 @@ class KansisScraper(RestaurantScraper):
                     next_sibling = next_sibling.find_next_sibling()
                 break
 
-        return menu_items if menu_items else f"Lounasta ei saatavilla {self.date_str}"
+        return menu_items if menu_items else self.fallback_menu
 
 
 class PompierAlbertinkatuScraper(RestaurantScraper):
@@ -109,7 +113,7 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
             (menu for day, menu in menu_details.items() if self.date_str in day),
             None,
         )
-        return menu_items if menu_items else f"Lounasta ei saatavilla {self.date_str}"
+        return menu_items if menu_items else self.fallback_menu
 
 
 class HamisScraper(RestaurantScraper):
@@ -134,7 +138,7 @@ class HamisScraper(RestaurantScraper):
             ]
             return menu_items
         else:
-            return "Today's menu not found."
+            return self.fallback_menu
 
 
 def get_lunch_info(restaurant_name):
