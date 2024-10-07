@@ -1,6 +1,8 @@
 import logging
 
 from fastapi import FastAPI
+from fastapi import Request
+from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
 from get_lunch_info import get_lunch_info
 from typing import Optional
@@ -17,6 +19,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Remove caching globally to prevent receiving old menus.
+@app.middleware("http")
+async def add_cache_control_header(request: Request, call_next):
+    response: Response = await call_next(request)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 @app.get("/")
 async def hello_fly():
