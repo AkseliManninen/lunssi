@@ -50,7 +50,8 @@ class BruuveriScraper(RestaurantScraper):
                     menu_text = next_sibling.get_text(separator="\n", strip=True)
                     if any(char.isdigit() for char in menu_text):
                         break
-                    menu_items.append(menu_text)
+                    items = menu_text.split("\n")
+                    menu_items.extend(items)
                     next_sibling = next_sibling.find_next(
                         "div", class_="vc_custom_heading_wrap"
                     )
@@ -109,10 +110,6 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
             ]
             menu_details[day] = menu_items
 
-        menu_items = next(
-            (menu for day, menu in menu_details.items() if self.date_str in day),
-            None,
-        )
         return menu_items if menu_items else self.fallback_menu
 
 
