@@ -4,7 +4,7 @@ import RestaurantCard from "@/components/RestaurantCard";
 
 const getRestaurantData = async () => {
   const restaurantNames = [
-    // "bruuveri", - Bruuveri denies our client with 443
+    "bruuveri",
     "kansis",
     "pompier-albertinkatu",
     "hämis",
