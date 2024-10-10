@@ -42,12 +42,12 @@ async def hello_fly():
 async def get_restaurant(name: Optional[str], lang: Optional[str] = "fi"):
     try:
         res = get_lunch_info(name, lang)
-        menu, lunch_price, lunch_available = res
+        full_name, menu, lunch_price, lunch_available = res
     except Exception as e:
         logging.error(f"Error getting lunch info for {name}: {e}")
         menu, lunch_price, lunch_available = f"Error {name}: {e}", 0, 0
     return {
-        "name": name.capitalize(),
+        "name": full_name,
         "lunchItems": menu,
         "lunchPrice": lunch_price,
         "lunchTime": lunch_available,

@@ -32,7 +32,7 @@ class RestaurantScraper:
             html_content = self.fetch_html_content(lang)
             soup = BeautifulSoup(html_content, "html.parser")
             menu = self.parse_menu(soup, lang)
-            return menu, self.lunch_price, self.lunch_available
+            return self.name, menu, self.lunch_price, self.lunch_available
         except Exception as e:
             return f"Error: {str(e)}"
 
@@ -130,7 +130,7 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
 class HamisScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
-            "Hämis",
+            "Hämäläis-Osakunta",
             "https://hys.net/osakuntabaari/ruokalista/",
             "2,95€",
             "11:00 - 15:00",
@@ -152,15 +152,15 @@ class HamisScraper(RestaurantScraper):
             return self.fallback_menu[lang]
 
 
-def get_lunch_info(restaurant_name, lang="fi"):
+def get_lunch_info(restaurant_shorthand, lang="fi"):
     scrapers = {
         "bruuveri": BruuveriScraper(),
         "kansis": KansisScraper(),
-        "pompier-albertinkatu": PompierAlbertinkatuScraper(),
+        "pompier_albertinkatu": PompierAlbertinkatuScraper(),
         "hämis": HamisScraper(),
     }
-    scraper = scrapers.get(restaurant_name.lower())
+    scraper = scrapers.get(restaurant_shorthand.lower())
     if scraper:
         return scraper.get_lunch_info(lang)
     else:
-        return f"No scraper found for restaurant: {restaurant_name}"
+        return f"No scraper found for restaurant: {restaurant_shorthand}"
