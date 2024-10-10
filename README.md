@@ -14,6 +14,8 @@ The backend runs locally on port 3000 using. The backend can be run with command
 
 Deploy frontend with `flyctl deploy`.
 
+When deploying, set `BACKEND_API_URL=https://lunssi-backend.fly.dev` in `.env`.
+
 Add env variables with `flyctl secrets set SECRET_NAME=secret`
 
 ## Backend
