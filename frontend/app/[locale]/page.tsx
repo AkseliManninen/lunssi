@@ -7,21 +7,21 @@ import TranslationsProvider from "@/components/TranslationProvider";
 import initTranslations from "../i18n";
 
 const getRestaurantData = async (locale: string) => {
-  const restaurantNames = [
+  const restaurantShorthands = [
     "bruuveri",
     "kansis",
-    "pompier-albertinkatu",
+    "pompier_albertinkatu",
     "hämis",
   ];
 
   const restaurantData = await Promise.all(
-    restaurantNames.map((name) =>
+    restaurantShorthands.map((shorthand) =>
       axios
         .get(
-          `${process.env.BACKEND_API_URL}/restaurant?name=${name}&lang=${locale}`,
+          `${process.env.BACKEND_API_URL}/restaurant?name=${shorthand}&lang=${locale}`
         )
-        .then((response) => response.data),
-    ),
+        .then((response) => response.data)
+    )
   );
   return restaurantData;
 };
