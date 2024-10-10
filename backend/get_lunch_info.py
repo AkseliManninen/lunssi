@@ -7,28 +7,34 @@ from datetime import datetime
 class RestaurantScraper:
     def __init__(self, name, url, lunch_price, lunch_available):
         self.date_str = datetime.now().strftime("%-d.%-m")
-        self.fallback_menu = [f"Tämän päivän lounasta ei löytynyt."]
+        self.fallback_menu = {
+            "fi": ["Tämän päivän lounasta ei löytynyt."],
+            "en": ["Today's lunch menu not found."],
+        }
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.name = name
         self.lunch_available = lunch_available
         self.lunch_price = lunch_price
         self.url = url
+        # Default to same URL for both languages
+        self.lang_urls = {
+            "fi": url,
+            "en": url,
+        }
 
-
-    def fetch_html_content(self):
-        response = requests.get(self.url, headers=self.headers)
+    def fetch_html_content(self, lang="fi"):
+        response = requests.get(self.lang_urls[lang], headers=self.headers)
         response.raise_for_status()
         return response.content
 
-
-    def get_lunch_info(self):
+    def get_lunch_info(self, lang="fi"):
         try:
-            html_content = self.fetch_html_content()
+            html_content = self.fetch_html_content(lang)
             soup = BeautifulSoup(html_content, "html.parser")
-            menu = self.parse_menu(soup)
+            menu = self.parse_menu(soup, lang)
             return menu, self.lunch_price, self.lunch_available
         except Exception as e:
-            return f"Virhe: {str(e)}"
+            return f"Error: {str(e)}"
 
 
 class BruuveriScraper(RestaurantScraper):
@@ -36,11 +42,15 @@ class BruuveriScraper(RestaurantScraper):
         super().__init__(
             "Bruuveri",
             "https://www.bruuveri.fi/lounas-menu/",
-            "14,50€ (Noutopöytä), 13€ (Kevytlounas)",
+            "14,50€ (Buffet), 13€ (Light lunch)",
             "11:00 - 14:00",
         )
+        self.lang_urls = {
+            "fi": "https://www.bruuveri.fi/lounas-menu/",
+            "en": "https://www.bruuveri.fi/en/lounas-menu/",
+        }
 
-    def parse_menu(self, soup):
+    def parse_menu(self, soup, lang):
         menu_items = []
         for menu in soup.find_all("div", class_="heading-text"):
             text = menu.get_text(strip=True)
@@ -57,7 +67,7 @@ class BruuveriScraper(RestaurantScraper):
                     )
                 break
 
-        return menu_items if menu_items else self.fallback_menu
+        return menu_items if menu_items else self.fallback_menu[lang]
 
 
 class KansisScraper(RestaurantScraper):
@@ -68,8 +78,12 @@ class KansisScraper(RestaurantScraper):
             "12.70 - 14.20€",
             "11:00 - 14:00",
         )
+        self.lang_urls = {
+            "fi": "https://ravintolakansis.fi/lounas/",
+            "en": "https://ravintolakansis.fi/lunchkamppi/",
+        }
 
-    def parse_menu(self, soup):
+    def parse_menu(self, soup, lang):
         menu_items = []
         for heading in soup.find_all("h3"):
             text = heading.get_text(strip=True)
@@ -83,7 +97,7 @@ class KansisScraper(RestaurantScraper):
                     next_sibling = next_sibling.find_next_sibling()
                 break
 
-        return menu_items if menu_items else self.fallback_menu
+        return menu_items if menu_items else self.fallback_menu[lang]
 
 
 class PompierAlbertinkatuScraper(RestaurantScraper):
@@ -92,10 +106,10 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
             "Pompier Albertinkatu",
             "https://pompier.fi/albertinkatu/albertinkatu-menu/",
             "14 - 19€",
-            "10:45 - 14:00 Arkisin",
+            "10:45 - 14:00",
         )
 
-    def parse_menu(self, soup):
+    def parse_menu(self, soup, lang):
         accordion_items = soup.find_all("div", class_="fl-accordion-item")
         menu_details = {}
         for item in accordion_items:
@@ -110,7 +124,7 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
             ]
             menu_details[day] = menu_items
 
-        return menu_items if menu_items else self.fallback_menu
+        return menu_items if menu_items else self.fallback_menu[lang]
 
 
 class HamisScraper(RestaurantScraper):
@@ -122,7 +136,7 @@ class HamisScraper(RestaurantScraper):
             "11:00 - 15:00",
         )
 
-    def parse_menu(self, soup):
+    def parse_menu(self, soup, lang):
         today_row = soup.find("div", class_="row row-today")
         if today_row:
             menu_div = today_row.find("div", class_="col-food")
@@ -135,10 +149,10 @@ class HamisScraper(RestaurantScraper):
             ]
             return menu_items
         else:
-            return self.fallback_menu
+            return self.fallback_menu[lang]
 
 
-def get_lunch_info(restaurant_name):
+def get_lunch_info(restaurant_name, lang="fi"):
     scrapers = {
         "bruuveri": BruuveriScraper(),
         "kansis": KansisScraper(),
@@ -147,6 +161,6 @@ def get_lunch_info(restaurant_name):
     }
     scraper = scrapers.get(restaurant_name.lower())
     if scraper:
-        return scraper.get_lunch_info()
+        return scraper.get_lunch_info(lang)
     else:
         return f"No scraper found for restaurant: {restaurant_name}"
