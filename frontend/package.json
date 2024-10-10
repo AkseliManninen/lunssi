@@ -10,9 +10,13 @@
   },
   "dependencies": {
     "axios": "^1.7.4",
+    "i18next": "^23.15.2",
+    "i18next-resources-to-backend": "^1.2.1",
     "next": "14.2.5",
+    "next-i18n-router": "^5.5.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-i18next": "^15.0.2"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.8",
