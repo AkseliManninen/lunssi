@@ -10,6 +10,7 @@ const getRestaurantData = async (locale: string) => {
   const restaurantShorthands = [
     "bruuveri",
     "kansis",
+    "plaza",
     "pompier_albertinkatu",
     "hämis",
     "queem",

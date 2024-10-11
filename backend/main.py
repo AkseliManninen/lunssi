@@ -45,7 +45,7 @@ async def get_restaurant(name: Optional[str], lang: Optional[str] = "fi"):
         full_name, menu, lunch_price, lunch_available = res
     except Exception as e:
         logging.error(f"Error getting lunch info for {name}: {e}")
-        menu, lunch_price, lunch_available = f"Error {name}: {e}", 0, 0
+        full_name, menu, lunch_price, lunch_available = "Restaurant not found", [f"Error {name}: {e}"], 0, 0
     return {
         "name": full_name,
         "lunchItems": menu,
