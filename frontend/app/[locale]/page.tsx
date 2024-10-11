@@ -12,16 +12,17 @@ const getRestaurantData = async (locale: string) => {
     "kansis",
     "pompier_albertinkatu",
     "hämis",
+    "queem",
   ];
 
   const restaurantData = await Promise.all(
     restaurantShorthands.map((shorthand) =>
       axios
         .get(
-          `${process.env.BACKEND_API_URL}/restaurant?name=${shorthand}&lang=${locale}`
+          `${process.env.BACKEND_API_URL}/restaurant?name=${shorthand}&lang=${locale}`,
         )
-        .then((response) => response.data)
-    )
+        .then((response) => response.data),
+    ),
   );
   return restaurantData;
 };
