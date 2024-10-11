@@ -24,6 +24,27 @@ class RestaurantScraper:
             "en": url,
         }
 
+    def get_day_name(self, lang="fi"):
+        english_days = [
+            "Monday", "Tuesday", "Wednesday", 
+            "Thursday", "Friday", "Saturday", "Sunday"
+        ]
+        
+        finnish_days = [
+            "Maanantai", "Tiistai", "Keskiviikko", 
+            "Torstai", "Perjantai", "Lauantai", "Sunnuntai"
+        ]
+        
+        date = datetime.now()
+        day_index = date.weekday()
+        
+        if lang == "fi":
+            return finnish_days[day_index]
+        elif lang == "en":
+            return english_days[day_index]
+        else:
+            raise ValueError(f"Language not supported: {lang}")
+
     def fetch_html_content(self, lang="fi"):
         response = requests.get(self.lang_urls[lang], headers=self.headers)
         response.raise_for_status()
@@ -123,6 +144,36 @@ class KansisScraper(RestaurantScraper):
         return menu_items if menu_items else self.fallback_menu[lang]
 
 
+class PlazaScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Plaza",
+            "https://www.ardenrestaurants.fi/menut/plaza/index.php",
+            "14,50€",
+            "10:30 - 14:00",
+        ) 
+
+    def parse_menu(self, soup, lang):
+        menu_items = []
+        for heading in soup.find_all('h3'):
+            text = heading.get_text(strip=True)
+            day = self.get_day_name()
+            if day in text:
+                next_div = heading.find_next('div')
+                next_p = next_div.find_next('p')
+                while next_p:
+                    if 'class' in next_p.attrs and 'description' in next_p['class']:
+                        break
+                    menu_text = next_p.get_text(separator="\n", strip=True)
+                    if menu_text in ["L", "G", "L,G"]:
+                        menu_items[-1] = menu_items[-1] + " " + menu_text
+                    else:
+                        menu_items.append(menu_text)
+                    next_p = next_p.find_next('p')
+                break 
+        return menu_items if menu_items else self.fallback_menu[lang]
+
+
 class PompierAlbertinkatuScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
@@ -218,6 +269,7 @@ def get_lunch_info(restaurant_shorthand, lang="fi"):
     scrapers = {
         "bruuveri": BruuveriScraper(),
         "kansis": KansisScraper(),
+        "plaza": PlazaScraper(),
         "pompier_albertinkatu": PompierAlbertinkatuScraper(),
         "hämis": HamisScraper(),
         "queem": QueemScraper(),
