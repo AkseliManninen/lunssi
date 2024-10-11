@@ -2,6 +2,8 @@ import requests
 
 from bs4 import BeautifulSoup
 from datetime import datetime
+import pymupdf
+import re
 
 
 class RestaurantScraper:
@@ -27,11 +29,32 @@ class RestaurantScraper:
         response.raise_for_status()
         return response.content
 
-    def get_lunch_info(self, lang="fi"):
+    def fetch_pdf_content(self, url):
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        data = response.content
+        return data
+
+    def extract_text_from_pdf(self, pdf_content):
+        doc = pymupdf.Document(stream=pdf_content)
+        text = ""
+        for page in doc:
+            text += page.get_text()
+        return text
+
+    def get_lunch_info(self, lang="fi", format="html"):
         try:
-            html_content = self.fetch_html_content(lang)
-            soup = BeautifulSoup(html_content, "html.parser")
-            menu = self.parse_menu(soup, lang)
+            if format == "html":
+                content = self.fetch_html_content(lang)
+                soup = BeautifulSoup(content, "html.parser")
+                menu = self.parse_menu(soup, lang)
+            elif format == "pdf":
+                pdf_content = self.fetch_pdf_content(self.url)
+                text = self.extract_text_from_pdf(pdf_content)
+                menu = self.parse_pdf_menu(text, lang)
+            else:
+                raise ValueError("Unsupported format. Use 'html' or 'pdf'.")
+
             return self.name, menu, self.lunch_price, self.lunch_available
         except Exception as e:
             return f"Error: {str(e)}"
@@ -152,12 +175,52 @@ class HamisScraper(RestaurantScraper):
             return self.fallback_menu[lang]
 
 
+class QueemScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Quê Em",
+            "https://queem.fi/wp-content/uploads/2024/09/",
+            "13,50€ - 16,90€",
+            "11:00 - 14:00",
+        )
+
+    def get_pdf_url(self):
+        today = datetime.now()
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        day_of_week = days[today.weekday()]
+        return f"{self.url}{day_of_week}-lunch-29.7-uudistettu.pdf"
+
+    def parse_pdf_menu(self, text, lang):
+        lines = text.split("\n")
+        lunch_items = []
+        current_item = None
+        current_lines = []
+        for line in lines:
+            line = line.strip()
+            if re.match(r"^\d+\.", line):
+                if current_item:
+                    lunch_items.append(" ".join([current_item] + current_lines))
+                current_item = line
+                current_lines = []
+            elif line and current_item is not None:
+                current_lines.append(line)
+        if current_item:
+            lunch_items.append(" ".join([current_item] + current_lines))
+
+        return lunch_items if lunch_items else self.fallback_menu[lang]
+
+    def get_lunch_info(self, lang="fi", format="pdf"):
+        self.url = self.get_pdf_url()
+        return super().get_lunch_info(lang, format)
+
+
 def get_lunch_info(restaurant_shorthand, lang="fi"):
     scrapers = {
         "bruuveri": BruuveriScraper(),
         "kansis": KansisScraper(),
         "pompier_albertinkatu": PompierAlbertinkatuScraper(),
         "hämis": HamisScraper(),
+        "queem": QueemScraper(),
     }
     scraper = scrapers.get(restaurant_shorthand.lower())
     if scraper:
