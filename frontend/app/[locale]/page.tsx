@@ -20,16 +20,16 @@ const getRestaurantData = async (locale: string) => {
     restaurantShorthands.map((shorthand) =>
       axios
         .get(
-          `${process.env.BACKEND_API_URL}/restaurant?name=${shorthand}&lang=${locale}`,
+          `${process.env.BACKEND_API_URL}/restaurant?name=${shorthand}&lang=${locale}`
         )
-        .then((response) => response.data),
-    ),
+        .then((response) => response.data)
+    )
   );
   return restaurantData;
 };
 
-// 12 hours
-export const revalidate = 43200;
+// 6 hours
+export const revalidate = 6 * 60 * 60;
 
 type Props = { params: { locale?: string } };
 
