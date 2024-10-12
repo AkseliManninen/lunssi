@@ -28,8 +28,8 @@ const getRestaurantData = async (locale: string) => {
   return restaurantData;
 };
 
-// 12 hours
-export const revalidate = 43200;
+// 6 hours
+export const revalidate = 6 * 6 * 60;
 
 type Props = { params: { locale?: string } };
 
