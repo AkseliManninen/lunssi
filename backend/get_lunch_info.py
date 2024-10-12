@@ -1,10 +1,9 @@
+import pymupdf
+import re
 import requests
 
 from bs4 import BeautifulSoup
 from datetime import datetime
-import pymupdf
-import re
-
 
 class RestaurantScraper:
     def __init__(self, name, url, lunch_price, lunch_available):
