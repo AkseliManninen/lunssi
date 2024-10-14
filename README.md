@@ -2,9 +2,9 @@
 
 Lunssi is a website displaying lunch menus near the Futurice office: lunssi.fly.dev/
 
-## Development
+# Frontend
 
-## Frontend
+## Development & Setup
 
 ### Starting the frontend
 
@@ -22,13 +22,29 @@ Add env variables with `flyctl secrets set SECRET_NAME=secret`
 
 The backend of the application is built with Python and FastAPI. The backend runs at https://lunssi-backend.fly.dev/.
 
-### Starting the backend
-
-The backend runs locally on port 8080 using uvicorn. Starting the backend can be triggered with make.py using command `make run`.
+## Development & Setup
 
 ### Creating a virtual environment
 
+There are different options for creating virtual environments for python such as conda and venv. The instructions will be added here at some point.
+
 ### Loading dependencies
+
+Dependencies are managed in `requirements.txt`.
+
+Load requirements with `pip install -r requirements.txt` .
+
+### Install git pre-commit hooks
+
+1. Go to the root of the repository where you can see `backend` and `frontend`.
+
+2. Install pre-commit with: `pre-commit install`.
+
+Pre-commit hooks use `black` to format automatically files, when trying to commit them.
+
+### Starting the backend
+
+The backend runs locally on port 8080 using uvicorn. Starting the backend can be triggered with make.py using command `make run`.
 
 ### Deploy to fly.io
 
