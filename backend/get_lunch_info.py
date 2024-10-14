@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+
 class RestaurantScraper:
     def __init__(self, name, url, lunch_price, lunch_available):
         self.date_str = datetime.now().strftime("%-d.%-m")
@@ -25,18 +26,28 @@ class RestaurantScraper:
 
     def get_day_name(self, lang="fi"):
         english_days = [
-            "Monday", "Tuesday", "Wednesday", 
-            "Thursday", "Friday", "Saturday", "Sunday"
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
         ]
-        
+
         finnish_days = [
-            "Maanantai", "Tiistai", "Keskiviikko", 
-            "Torstai", "Perjantai", "Lauantai", "Sunnuntai"
+            "Maanantai",
+            "Tiistai",
+            "Keskiviikko",
+            "Torstai",
+            "Perjantai",
+            "Lauantai",
+            "Sunnuntai",
         ]
-        
+
         date = datetime.now()
         day_index = date.weekday()
-        
+
         if lang == "fi":
             return finnish_days[day_index]
         elif lang == "en":
@@ -150,26 +161,26 @@ class PlazaScraper(RestaurantScraper):
             "https://www.ardenrestaurants.fi/menut/plaza/index.php",
             "14,50€",
             "10:30 - 14:00",
-        ) 
+        )
 
     def parse_menu(self, soup, lang):
         menu_items = []
-        for heading in soup.find_all('h3'):
+        for heading in soup.find_all("h3"):
             text = heading.get_text(strip=True)
             day = self.get_day_name()
             if day in text:
-                next_div = heading.find_next('div')
-                next_p = next_div.find_next('p')
+                next_div = heading.find_next("div")
+                next_p = next_div.find_next("p")
                 while next_p:
-                    if 'class' in next_p.attrs and 'description' in next_p['class']:
+                    if "class" in next_p.attrs and "description" in next_p["class"]:
                         break
                     menu_text = next_p.get_text(separator="\n", strip=True)
                     if menu_text in ["L", "G", "L,G"]:
                         menu_items[-1] = menu_items[-1] + " " + menu_text
                     else:
                         menu_items.append(menu_text)
-                    next_p = next_p.find_next('p')
-                break 
+                    next_p = next_p.find_next("p")
+                break
         return menu_items if menu_items else self.fallback_menu[lang]
 
 
@@ -229,16 +240,22 @@ class QueemScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
             "Quê Em",
-            "https://queem.fi/wp-content/uploads/2024/09/",
+            "https://queem.fi/wp-content/uploads/2024/10/",
             "13,50€ - 16,90€",
             "11:00 - 14:00",
         )
 
     def get_pdf_url(self):
-        today = datetime.now()
-        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-        day_of_week = days[today.weekday()]
-        return f"{self.url}{day_of_week}-lunch-29.7-uudistettu.pdf"
+        today = datetime.now().strftime("%A")
+        # This is a bit stupid, but looks like we have to do it like this
+        day_mapping = {
+            "Monday": "Lunch2-Monday-20.8-uudistettu.pdf",
+            "Tuesday": "Lunch2-Tuesday-20.8-uudistettu.pdf",
+            "Wednesday": "Lunch2-wednesday-20.8-uudistettu.pdf",
+            "Thursday": "lunch2-thursday-20.8-uudistettu-PDF.pdf",
+            "Friday": "lunch2-friday-20.8-uudistettu.pdf",
+        }
+        return f"{self.url}{day_mapping[today]}"
 
     def parse_pdf_menu(self, text, lang):
         lines = text.split("\n")
