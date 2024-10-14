@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
 import { useCurrentLocale } from "next-i18n-router/client";
+import { usePathname, useRouter } from "next/navigation";
 import type { ChangeEvent } from "react";
 import React from "react";
 

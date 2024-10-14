@@ -116,9 +116,7 @@ class BruuveriScraper(RestaurantScraper):
                         break
                     items = menu_text.split("\n")
                     menu_items.extend(items)
-                    next_sibling = next_sibling.find_next(
-                        "div", class_="vc_custom_heading_wrap"
-                    )
+                    next_sibling = next_sibling.find_next("div", class_="vc_custom_heading_wrap")
                 break
 
         return menu_items if menu_items else self.fallback_menu[lang]
@@ -200,12 +198,8 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
             day = item.find("a", class_="fl-accordion-button-label").text.strip()
             menu_content = item.find("div", class_="fl-accordion-content").find("p")
             menu_html = str(menu_content)
-            menu_items = [
-                item.strip() for item in menu_html.split("<br/>") if item.strip()
-            ]
-            menu_items = [
-                BeautifulSoup(item, "html.parser").text for item in menu_items
-            ]
+            menu_items = [item.strip() for item in menu_html.split("<br/>") if item.strip()]
+            menu_items = [BeautifulSoup(item, "html.parser").text for item in menu_items]
             menu_details[day] = menu_items
 
         return menu_items if menu_items else self.fallback_menu[lang]
@@ -225,12 +219,8 @@ class HamisScraper(RestaurantScraper):
         if today_row:
             menu_div = today_row.find("div", class_="col-food")
             menu_html = str(menu_div.p)
-            menu_items = [
-                item.strip() for item in menu_html.split("<br/>") if item.strip()
-            ]
-            menu_items = [
-                BeautifulSoup(item, "html.parser").text for item in menu_items
-            ]
+            menu_items = [item.strip() for item in menu_html.split("<br/>") if item.strip()]
+            menu_items = [BeautifulSoup(item, "html.parser").text for item in menu_items]
             return menu_items
         else:
             return self.fallback_menu[lang]

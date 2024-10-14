@@ -9,9 +9,7 @@ from typing import Optional
 
 app = FastAPI()
 
-logging.basicConfig(
-    level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Add CORS middleware to allow requests from the frontend
 app.add_middleware(
@@ -45,7 +43,12 @@ async def get_restaurant(name: Optional[str], lang: Optional[str] = "fi"):
         full_name, menu, lunch_price, lunch_available = res
     except Exception as e:
         logging.error(f"Error getting lunch info for {name}: {e}")
-        full_name, menu, lunch_price, lunch_available = "Restaurant not found", [f"Error {name}: {e}"], 0, 0
+        full_name, menu, lunch_price, lunch_available = (
+            "Restaurant not found",
+            [f"Error {name}: {e}"],
+            0,
+            0,
+        )
     return {
         "name": full_name,
         "lunchItems": menu,
