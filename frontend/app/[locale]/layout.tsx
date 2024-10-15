@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import i18nConfig from "@/i18nConfig";
+import type { ReactNode } from "react";
 import "@/styles/globals.css";
 import { notFound } from "next/navigation";
 

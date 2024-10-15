@@ -38,9 +38,9 @@ Load requirements with `pip install -r requirements.txt` .
 
 1. Go to the root of the repository where you can see `backend` and `frontend`.
 
-2. Install pre-commit with: `pre-commit install`.
+2. Install git hooks with `npx lefthook install`
 
-Pre-commit hooks use `black` to format automatically files, when trying to commit them.
+Pre-commit hooks use `black` and `biome` to automatically format files, when trying to commit them.
 
 ### Starting the backend
 
