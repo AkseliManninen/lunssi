@@ -45,20 +45,26 @@ const Home = async ({ params }: Props) => {
       locale={locale}
       resources={resources}
     >
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold my-8">Lunssi</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {restaurants.map(({ name, lunchItems, lunchPrice, lunchTime }) => (
-            <RestaurantCard
-              key={name}
-              name={name}
-              lunchItems={lunchItems}
-              lunchPrice={lunchPrice}
-              lunchTime={lunchTime}
-            />
-          ))}
+      <div className="bg-gray-100 min-h-screen">
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+            Lunssi
+          </h1>
+          <div className="mt-8 mb-5 flex justify-end">
+            <LanguageChanger />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {restaurants.map(({ name, lunchItems, lunchPrice, lunchTime }) => (
+              <RestaurantCard
+                key={name}
+                name={name}
+                lunchItems={lunchItems}
+                lunchPrice={lunchPrice}
+                lunchTime={lunchTime}
+              />
+            ))}
+          </div>
         </div>
-        <LanguageChanger />
       </div>
     </TranslationsProvider>
   );
