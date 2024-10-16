@@ -1,30 +1,19 @@
 import LanguageChanger from "@/components/LanguageChanger";
-import RestaurantCard from "@/components/RestaurantCard";
+import RestaurantCard, {
+  type RestaurantCardProps,
+} from "@/components/RestaurantCard";
 import TranslationsProvider from "@/components/TranslationProvider";
 import i18nConfig from "@/i18nConfig";
 import axios from "axios";
 import React from "react";
 import initTranslations from "../i18n";
 
-const getRestaurantData = async (locale: string) => {
-  const restaurantShorthands = [
-    "bruuveri",
-    "kansis",
-    "plaza",
-    "pompier_albertinkatu",
-    "hämis",
-    "queem",
-  ];
-
-  const restaurantData = await Promise.all(
-    restaurantShorthands.map((shorthand) =>
-      axios
-        .get(
-          `${process.env.BACKEND_API_URL}/restaurant?name=${shorthand}&lang=${locale}`,
-        )
-        .then((response) => response.data),
-    ),
-  );
+const getRestaurantData = async (
+  locale: string,
+): Promise<RestaurantCardProps[]> => {
+  const restaurantData = await axios
+    .get(`${process.env.BACKEND_API_URL}/restaurants?lang=${locale}`)
+    .then((response) => response.data);
   return restaurantData;
 };
 
