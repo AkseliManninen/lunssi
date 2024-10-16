@@ -1,6 +1,6 @@
 import pymupdf
 import re
-import requests
+import httpx
 
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -55,16 +55,17 @@ class RestaurantScraper:
         else:
             raise ValueError(f"Language not supported: {lang}")
 
-    def fetch_html_content(self, lang="fi"):
-        response = requests.get(self.lang_urls[lang], headers=self.headers)
-        response.raise_for_status()
-        return response.content
+    async def fetch_html_content(self, lang="fi"):
+        async with httpx.AsyncClient() as client:
+            response = await client.get(self.lang_urls[lang], headers=self.headers)
+            response.raise_for_status()
+            return response.content
 
-    def fetch_pdf_content(self, url):
-        response = requests.get(url, headers=self.headers)
-        response.raise_for_status()
-        data = response.content
-        return data
+    async def fetch_pdf_content(self, url):
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=self.headers)
+            response.raise_for_status()
+            return response.content
 
     def extract_text_from_pdf(self, pdf_content):
         doc = pymupdf.Document(stream=pdf_content)
@@ -73,19 +74,18 @@ class RestaurantScraper:
             text += page.get_text()
         return text
 
-    def get_lunch_info(self, lang="fi", format="html"):
+    async def get_lunch_info(self, lang="fi", format="html"):
         try:
             if format == "html":
-                content = self.fetch_html_content(lang)
+                content = await self.fetch_html_content(lang)
                 soup = BeautifulSoup(content, "html.parser")
                 menu = self.parse_menu(soup, lang)
             elif format == "pdf":
-                pdf_content = self.fetch_pdf_content(self.url)
+                pdf_content = await self.fetch_pdf_content(self.url)
                 text = self.extract_text_from_pdf(pdf_content)
                 menu = self.parse_pdf_menu(text, lang)
             else:
                 raise ValueError("Unsupported format. Use 'html' or 'pdf'.")
-
             return self.name, menu, self.lunch_price, self.lunch_available
         except Exception as e:
             return f"Error: {str(e)}"

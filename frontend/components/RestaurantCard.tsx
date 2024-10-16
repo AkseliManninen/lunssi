@@ -6,7 +6,7 @@ import type React from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-interface RestaurantCardProps {
+export interface RestaurantCardProps {
   name: string;
   lunchItems: string[];
   lunchPrice: string;
