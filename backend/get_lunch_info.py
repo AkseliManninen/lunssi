@@ -56,13 +56,13 @@ class RestaurantScraper:
             raise ValueError(f"Language not supported: {lang}")
 
     async def fetch_html_content(self, lang="fi"):
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=10) as client:
             response = await client.get(self.lang_urls[lang], headers=self.headers)
             response.raise_for_status()
             return response.content
 
     async def fetch_pdf_content(self, url):
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=10) as client:
             response = await client.get(url, headers=self.headers)
             response.raise_for_status()
             return response.content
