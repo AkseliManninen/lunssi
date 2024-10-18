@@ -1,0 +1,10 @@
+version: '3'
+
+includes:
+  # Initializes the project locally. (Populate env. files, check tools etc.)
+  init:
+    taskfile: ./tasks/init.yml
+
+  # Setup local environment and start development environment
+  dev:
+    taskfile: ./tasks/dev.yml

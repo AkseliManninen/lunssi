@@ -1,0 +1,16 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: frontend
+
+  backend:
+    dir: ./backend
+    cmds:
+      - source venv/bin/activate && uvicorn main:app --reload --port 8080
+
+  frontend:
+    dir: ./frontend
+    cmds:
+      - npx next dev
