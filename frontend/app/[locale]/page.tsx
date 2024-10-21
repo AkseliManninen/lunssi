@@ -5,6 +5,7 @@ import RestaurantCard, {
 import TranslationsProvider from "@/components/TranslationProvider";
 import i18nConfig from "@/i18nConfig";
 import axios from "axios";
+import type { Metadata } from "next";
 import React from "react";
 import initTranslations from "../i18n";
 
@@ -23,6 +24,20 @@ export const revalidate = 21600;
 type Props = { params: { locale?: string } };
 
 const i18nNamespaces = ["translation"];
+
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const locale = params.locale ?? i18nConfig.defaultLocale;
+  const { t } = await initTranslations(locale, i18nNamespaces);
+  return {
+    description: t("metaDescription"),
+    openGraph: {
+      description: t("metaDescription"),
+      locale,
+    },
+  };
+};
 
 const Home = async ({ params }: Props) => {
   const locale = params.locale ?? i18nConfig.defaultLocale;
