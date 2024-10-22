@@ -5,8 +5,9 @@ Lunssi is a website displaying lunch menus near the Futurice office: https://lun
 ## Installation
 
 - Install [Task](https://taskfile.dev/installation/)
-- Initialize project with `task init`. This installs dependencies for both the
-  front and backend, using a Python virtual environment for the backend.
+- Initialize project with `task init`. This command installs all necessary
+  dependencies for both the frontend and backend. It also creates a Python
+  virtual environment for the backend to manage its dependencies.
 
 ## Frontend
 
@@ -31,8 +32,9 @@ runs at https://lunssi-backend.fly.dev/.
 
 ### Starting the backend
 
-Start the backend with `task dev:backend`. The backend runs locally on port
-8080 using uvicorn.
+Start the backend with `task dev:backend`. This command activates the Python
+virtual environment and starts the backend with hot-reloading enabled. The
+backend will run locally on port 8080 using uvicorn.
 
 ### Deploy to fly.io
 
