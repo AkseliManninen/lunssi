@@ -1,0 +1,20 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: frontend
+      - task: backend
+      - npx lefthook install
+      - echo "Dependencies installed"
+
+  frontend:
+    dir: ./frontend
+    cmds:
+      - npm install
+
+  backend:
+    dir: ./backend
+    cmds:
+      - python3 -m venv venv
+      - source venv/bin/activate && pip install -r requirements.txt
