@@ -69,10 +69,11 @@ async def get_restaurant(name: Optional[str], lang: Optional[str] = "fi"):
 async def get_restaurants(lang: Optional[str] = "fi"):
     restaurant_shorthands = [
         "bruuveri",
+        "hanken",
+        "hämis",
         "kansis",
         "plaza",
         "pompier_albertinkatu",
-        "hämis",
         "queem",
     ]
 
