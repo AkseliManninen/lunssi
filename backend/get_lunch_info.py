@@ -61,6 +61,12 @@ class RestaurantScraper:
             response.raise_for_status()
             return response.content
 
+    async def fetch_json_content(self, lang="fi"):
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.get(self.lang_urls[lang], headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+
     async def fetch_pdf_content(self, url):
         async with httpx.AsyncClient(timeout=10) as client:
             response = await client.get(url, headers=self.headers)
@@ -84,8 +90,11 @@ class RestaurantScraper:
                 pdf_content = await self.fetch_pdf_content(self.url)
                 text = self.extract_text_from_pdf(pdf_content)
                 menu = self.parse_pdf_menu(text, lang)
+            elif format == "json":
+                content = await self.fetch_json_content(lang)
+                menu = self.parse_json_menu(content, lang)
             else:
-                raise ValueError("Unsupported format. Use 'html' or 'pdf'.")
+                raise ValueError("Unsupported format. Use 'html', 'pdf', or 'json'.")
             return self.name, menu, self.lunch_price, self.lunch_available
         except Exception as e:
             return f"Error: {str(e)}"
@@ -271,13 +280,54 @@ class QueemScraper(RestaurantScraper):
         return super().get_lunch_info(lang, format)
 
 
+class HankenScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Hanken",
+            "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
+            "2,95€",
+            "11:00 - 15:00",
+        )
+        self.lang_urls = {
+            "fi": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
+            "en": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=en",
+        }
+
+    def parse_json_menu(self, data, lang):
+        today = datetime.now().date()
+        today_menu = None
+
+        for daily_menu in data["MenusForDays"]:
+            menu_date = datetime.fromisoformat(daily_menu["Date"].replace("\u002B", "+")).date()
+            if menu_date == today:
+                today_menu = daily_menu
+                break
+
+        if not today_menu or not today_menu["SetMenus"]:
+            return self.fallback_menu[lang]
+
+        menu_items = []
+        for set_menu in today_menu["SetMenus"]:
+            cleaned_components = [
+                " ".join(component.split()) for component in set_menu["Components"]
+            ]
+            menu_line = f"{set_menu['Name']}: {', '.join(cleaned_components)}"
+            menu_items.append(menu_line)
+
+        return menu_items if menu_items else self.fallback_menu[lang]
+
+    def get_lunch_info(self, lang="fi", format="json"):
+        return super().get_lunch_info(lang, format)
+
+
 def get_lunch_info(restaurant_shorthand, lang="fi"):
     scrapers = {
         "bruuveri": BruuveriScraper(),
+        "hanken": HankenScraper(),
+        "hämis": HamisScraper(),
         "kansis": KansisScraper(),
         "plaza": PlazaScraper(),
         "pompier_albertinkatu": PompierAlbertinkatuScraper(),
-        "hämis": HamisScraper(),
         "queem": QueemScraper(),
     }
     scraper = scrapers.get(restaurant_shorthand.lower())
