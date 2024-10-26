@@ -297,7 +297,7 @@ class QueemScraper(RestaurantScraper):
             }
             return f"{self.url}{day_mapping[today]}"
         else:
-            return self.fallback_menu[lang]
+            return None
 
     def parse_pdf_menu(self, text, lang):
         lines = text.split("\n")
@@ -320,7 +320,10 @@ class QueemScraper(RestaurantScraper):
 
     def get_lunch_info(self, lang="fi", format="pdf"):
         self.url = self.get_pdf_url(lang)
-        return super().get_lunch_info(lang, format)
+        if self.url:
+            return super().get_lunch_info(lang, format)
+        else:
+            return self.fallback_menu[lang]
 
 
 class StahlbergScraper(RestaurantScraper):
