@@ -285,17 +285,19 @@ class QueemScraper(RestaurantScraper):
             "11:00 - 14:00",
         )
 
-    def get_pdf_url(self):
+    def get_pdf_url(self, lang):
         today = datetime.now().strftime("%A")
-        # This is a bit stupid, but looks like we have to do it like this
-        day_mapping = {
-            "Monday": "Lunch2-Monday-20.8-uudistettu.pdf",
-            "Tuesday": "Lunch2-Tuesday-20.8-uudistettu.pdf",
-            "Wednesday": "Lunch2-wednesday-20.8-uudistettu.pdf",
-            "Thursday": "lunch2-thursday-20.8-uudistettu-PDF.pdf",
-            "Friday": "lunch2-friday-20.8-uudistettu.pdf",
-        }
-        return f"{self.url}{day_mapping[today]}"
+        if today not in ["Saturday", "Sunday"]:
+            day_mapping = {
+                "Monday": "Lunch2-Monday-20.8-uudistettu.pdf",
+                "Tuesday": "Lunch2-Tuesday-20.8-uudistettu.pdf",
+                "Wednesday": "Lunch2-wednesday-20.8-uudistettu.pdf",
+                "Thursday": "lunch2-thursday-20.8-uudistettu-PDF.pdf",
+                "Friday": "lunch2-friday-20.8-uudistettu.pdf",
+            }
+            return f"{self.url}{day_mapping[today]}"
+        else:
+            return self.fallback_menu[lang]
 
     def parse_pdf_menu(self, text, lang):
         lines = text.split("\n")
@@ -317,7 +319,7 @@ class QueemScraper(RestaurantScraper):
         return lunch_items if lunch_items else self.fallback_menu[lang]
 
     def get_lunch_info(self, lang="fi", format="pdf"):
-        self.url = self.get_pdf_url()
+        self.url = self.get_pdf_url(lang)
         return super().get_lunch_info(lang, format)
 
 
