@@ -25,7 +25,7 @@ When deploying, set `BACKEND_API_URL=https://lunssi-backend.fly.dev` in `.env`.
 
 Add env variables with `flyctl secrets set SECRET_NAME=secret`
 
-### Backend
+## Backend
 
 The backend of the application is built with Python and FastAPI. The backend
 runs at https://lunssi-backend.fly.dev/.
