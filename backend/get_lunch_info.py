@@ -1,6 +1,6 @@
+import httpx
 import pymupdf
 import re
-import httpx
 
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -23,6 +23,7 @@ class RestaurantScraper:
             "fi": url,
             "en": url,
         }
+        self.region = "kamppi"
 
     def get_day_name(self, lang="fi"):
         english_days = [
@@ -161,6 +162,67 @@ class KansisScraper(RestaurantScraper):
         return menu_items if menu_items else self.fallback_menu[lang]
 
 
+class HankenScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Hanken",
+            "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
+            "2,95€",
+            "11:00 - 15:00",
+        )
+        self.lang_urls = {
+            "fi": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
+            "en": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=en",
+        }
+
+    def parse_json_menu(self, data, lang):
+        today = datetime.now().date()
+        today_menu = None
+
+        for daily_menu in data["MenusForDays"]:
+            menu_date = datetime.fromisoformat(daily_menu["Date"].replace("\u002B", "+")).date()
+            if menu_date == today:
+                today_menu = daily_menu
+                break
+
+        if not today_menu or not today_menu["SetMenus"]:
+            return self.fallback_menu[lang]
+
+        menu_items = []
+        for set_menu in today_menu["SetMenus"]:
+            cleaned_components = [
+                " ".join(component.split()) for component in set_menu["Components"]
+            ]
+            menu_line = f"{set_menu['Name']}: {', '.join(cleaned_components)}"
+            menu_items.append(menu_line)
+
+        return menu_items if menu_items else self.fallback_menu[lang]
+
+    def get_lunch_info(self, lang="fi", format="json"):
+        return super().get_lunch_info(lang, format)
+
+
+class HamisScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Hämäläis-Osakunta",
+            "https://hys.net/osakuntabaari/ruokalista/",
+            "2,95€",
+            "11:00 - 15:00",
+        )
+
+    def parse_menu(self, soup, lang):
+        today_row = soup.find("div", class_="row row-today")
+        if today_row:
+            menu_div = today_row.find("div", class_="col-food")
+            menu_html = str(menu_div.p)
+            menu_items = [item.strip() for item in menu_html.split("<br/>") if item.strip()]
+            menu_items = [BeautifulSoup(item, "html.parser").text for item in menu_items]
+            return menu_items
+        else:
+            return self.fallback_menu[lang]
+
+
 class PlazaScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
@@ -214,27 +276,6 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
         return menu_details[current_day] if menu_details[current_day] else self.fallback_menu[lang]
 
 
-class HamisScraper(RestaurantScraper):
-    def __init__(self):
-        super().__init__(
-            "Hämäläis-Osakunta",
-            "https://hys.net/osakuntabaari/ruokalista/",
-            "2,95€",
-            "11:00 - 15:00",
-        )
-
-    def parse_menu(self, soup, lang):
-        today_row = soup.find("div", class_="row row-today")
-        if today_row:
-            menu_div = today_row.find("div", class_="col-food")
-            menu_html = str(menu_div.p)
-            menu_items = [item.strip() for item in menu_html.split("<br/>") if item.strip()]
-            menu_items = [BeautifulSoup(item, "html.parser").text for item in menu_items]
-            return menu_items
-        else:
-            return self.fallback_menu[lang]
-
-
 class QueemScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
@@ -280,48 +321,41 @@ class QueemScraper(RestaurantScraper):
         return super().get_lunch_info(lang, format)
 
 
-class HankenScraper(RestaurantScraper):
+class StahlbergScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
-            "Hanken",
-            "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
-            "2,95€",
-            "11:00 - 15:00",
+            "Ståhlberg Tampella",
+            "https://www.stahlbergkahvilat.fi/stahlberg-tampella/",
+            "13,50€ (Buffet)",
+            "10:30 - 15:00",
         )
-        self.lang_urls = {
-            "fi": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
-            "en": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=en",
-        }
+        self.region = "tampere"
 
-    def parse_json_menu(self, data, lang):
-        today = datetime.now().date()
-        today_menu = None
+    def parse_menu(self, soup, lang):
+        day_id = self.get_day_name().lower()
+        day_div = soup.find("div", {"id": day_id})
+        if not day_div:
+            return self.fallback_menu[lang]
 
-        for daily_menu in data["MenusForDays"]:
-            menu_date = datetime.fromisoformat(daily_menu["Date"].replace("\u002B", "+")).date()
-            if menu_date == today:
-                today_menu = daily_menu
-                break
-
-        if not today_menu or not today_menu["SetMenus"]:
+        menu_table = day_div.find("table", {"class": "tablepress"})
+        if not menu_table:
             return self.fallback_menu[lang]
 
         menu_items = []
-        for set_menu in today_menu["SetMenus"]:
-            cleaned_components = [
-                " ".join(component.split()) for component in set_menu["Components"]
-            ]
-            menu_line = f"{set_menu['Name']}: {', '.join(cleaned_components)}"
-            menu_items.append(menu_line)
+        for row in menu_table.find_all("tr"):
+            cell = row.find("td")
+            if cell:
+                menu_text = cell.text.strip()
+                items = [item.strip() for item in menu_text.split("–") if item.strip()]
+                menu_items.extend(items)
+
+        menu_items = list(dict.fromkeys(filter(None, menu_items)))
 
         return menu_items if menu_items else self.fallback_menu[lang]
 
-    def get_lunch_info(self, lang="fi", format="json"):
-        return super().get_lunch_info(lang, format)
 
-
-def get_lunch_info(restaurant_shorthand, lang="fi"):
-    scrapers = {
+def get_restaurants_by_region(region="kamppi"):
+    all_scrapers = {
         "bruuveri": BruuveriScraper(),
         "hanken": HankenScraper(),
         "hämis": HamisScraper(),
@@ -329,8 +363,14 @@ def get_lunch_info(restaurant_shorthand, lang="fi"):
         "plaza": PlazaScraper(),
         "pompier_albertinkatu": PompierAlbertinkatuScraper(),
         "queem": QueemScraper(),
+        "stahlberg": StahlbergScraper(),
     }
-    scraper = scrapers.get(restaurant_shorthand.lower())
+    return {name: scraper for name, scraper in all_scrapers.items() if scraper.region == region}
+
+
+def get_lunch_info(restaurant_shorthand, region="kamppi", lang="fi"):
+    scrapers_region = get_restaurants_by_region(region)
+    scraper = scrapers_region.get(restaurant_shorthand.lower())
     if scraper:
         return scraper.get_lunch_info(lang)
     else:

@@ -1,4 +1,5 @@
 import LanguageChanger from "@/components/LanguageChanger";
+import RegionChanger from "@/components/RegionChanger";
 import RestaurantCard, {
   type RestaurantCardProps,
 } from "@/components/RestaurantCard";
@@ -11,9 +12,15 @@ import initTranslations from "../i18n";
 
 const getRestaurantData = async (
   locale: string,
+  region?: string,
 ): Promise<RestaurantCardProps[]> => {
+  const params = new URLSearchParams({ lang: locale });
+  if (region) {
+    params.append("region", region);
+  }
+
   const restaurantData = await axios
-    .get(`${process.env.BACKEND_API_URL}/restaurants?lang=${locale}`)
+    .get(`${process.env.BACKEND_API_URL}/restaurants?${params.toString()}`)
     .then((response) => response.data);
   return restaurantData;
 };
@@ -39,9 +46,16 @@ export const generateMetadata = async ({
   };
 };
 
-const Home = async ({ params }: Props) => {
+const Home = async ({
+  params,
+  searchParams,
+}: {
+  params: { locale?: string };
+  searchParams: { region?: string };
+}) => {
   const locale = params.locale ?? i18nConfig.defaultLocale;
-  const restaurants = await getRestaurantData(locale);
+  const { region } = searchParams;
+  const restaurants = await getRestaurantData(locale, region);
   const { resources } = await initTranslations(locale, i18nNamespaces);
   return (
     <TranslationsProvider
@@ -54,7 +68,8 @@ const Home = async ({ params }: Props) => {
           <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
             Lunssi
           </h1>
-          <div className="mt-8 mb-5 flex justify-end">
+          <div className="mt-8 mb-5 flex justify-end gap-4">
+            <RegionChanger />
             <LanguageChanger />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

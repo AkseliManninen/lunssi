@@ -6,6 +6,7 @@ from fastapi import Request
 from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
 from get_lunch_info import get_lunch_info
+from get_lunch_info import get_restaurants_by_region
 from typing import Optional
 
 app = FastAPI()
@@ -56,9 +57,9 @@ def structure_response(result, name=""):
 
 
 @app.get("/restaurant")
-async def get_restaurant(name: Optional[str], lang: Optional[str] = "fi"):
+async def get_restaurant(name: Optional[str], region: Optional[str], lang: Optional[str] = "fi"):
     try:
-        result = await get_lunch_info(name, lang)
+        result = await get_lunch_info(name, region, lang)
     except Exception as e:
         logging.error(f"Error getting lunch info for {name}: {e}")
         result = f"Error: {str(e)}"
@@ -66,20 +67,13 @@ async def get_restaurant(name: Optional[str], lang: Optional[str] = "fi"):
 
 
 @app.get("/restaurants")
-async def get_restaurants(lang: Optional[str] = "fi"):
-    restaurant_shorthands = [
-        "bruuveri",
-        "hanken",
-        "hämis",
-        "kansis",
-        "plaza",
-        "pompier_albertinkatu",
-        "queem",
-    ]
+async def get_restaurants(region: Optional[str] = "kamppi", lang: Optional[str] = "fi"):
+    available_restaurants = get_restaurants_by_region(region)
+    restaurant_shorthands = list(available_restaurants.keys())
 
     async def fetch_menu(restaurant):
         try:
-            return await get_lunch_info(restaurant, lang)
+            return await get_lunch_info(restaurant, region, lang)
         except Exception as e:
             logging.error(f"Error fetching lunch info for {restaurant}: {e}")
             return f"Error fetching {restaurant} menu: {str(e)}"
