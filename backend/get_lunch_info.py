@@ -88,9 +88,12 @@ class RestaurantScraper:
                 soup = BeautifulSoup(content, "html.parser")
                 menu = self.parse_menu(soup, lang)
             elif format == "pdf":
-                pdf_content = await self.fetch_pdf_content(self.url)
-                text = self.extract_text_from_pdf(pdf_content)
-                menu = self.parse_pdf_menu(text, lang)
+                if self.url:
+                    pdf_content = await self.fetch_pdf_content(self.url)
+                    text = self.extract_text_from_pdf(pdf_content)
+                    menu = self.parse_pdf_menu(text, lang)
+                else:
+                    menu = self.fallback_menu[lang]
             elif format == "json":
                 content = await self.fetch_json_content(lang)
                 menu = self.parse_json_menu(content, lang)
@@ -98,7 +101,7 @@ class RestaurantScraper:
                 raise ValueError("Unsupported format. Use 'html', 'pdf', or 'json'.")
             return self.name, menu, self.lunch_price, self.lunch_available
         except Exception as e:
-            return f"Error: {str(e)}"
+            return self.name, self.fallback_menu[lang], self.lunch_price, self.lunch_available
 
 
 class BruuveriScraper(RestaurantScraper):
@@ -285,7 +288,7 @@ class QueemScraper(RestaurantScraper):
             "11:00 - 14:00",
         )
 
-    def get_pdf_url(self, lang):
+    def get_pdf_url(self):
         today = datetime.now().strftime("%A")
         if today not in ["Saturday", "Sunday"]:
             day_mapping = {
@@ -319,11 +322,8 @@ class QueemScraper(RestaurantScraper):
         return lunch_items if lunch_items else self.fallback_menu[lang]
 
     def get_lunch_info(self, lang="fi", format="pdf"):
-        self.url = self.get_pdf_url(lang)
-        if self.url:
-            return super().get_lunch_info(lang, format)
-        else:
-            return self.fallback_menu[lang]
+        self.url = self.get_pdf_url()
+        return super().get_lunch_info(lang, format)
 
 
 class StahlbergScraper(RestaurantScraper):
