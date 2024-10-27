@@ -1,40 +1,27 @@
 "use client";
 
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { regions } from "@/utils/constants";
+import { usePathname, useRouter } from "next/navigation";
 import type { ChangeEvent } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const regions = [
-  { id: "kamppi", label: "Helsinki - Kamppi" },
-  { id: "tampere", label: "Tampere" },
-];
+interface Props {
+  currentRegion: string;
+}
 
-const RegionChanger = () => {
+const RegionChanger = ({ currentRegion }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { t } = useTranslation();
-
-  const currentRegion = searchParams.get("region") || regions[0].id;
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newRegion = e.target.value;
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
-
-    if (newRegion) {
-      current.set("region", newRegion);
-    } else {
-      current.delete("region");
-    }
-
-    // Create new URL with updated search params
-    const search = current.toString();
-    const query = search ? `?${search}` : "";
-
-    router.push(`${pathname}${query}`);
-    router.refresh();
+    const newPath = pathname.includes(currentRegion)
+      ? pathname.replace(currentRegion, newRegion)
+      : `/${newRegion}`;
+    router.push(newPath);
   };
 
   return (
