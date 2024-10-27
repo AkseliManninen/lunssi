@@ -27,6 +27,8 @@ RUN npm ci --include=dev
 # Copy application code
 COPY --link . .
 
+ENV BACKEND_API_URL="https://lunssi-backend.fly.dev"
+
 # Build application
 RUN npm run build
 
