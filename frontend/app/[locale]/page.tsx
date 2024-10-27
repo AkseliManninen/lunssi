@@ -1,14 +1,17 @@
-import i18nConfig from "@/i18nConfig";
 import { defaultRegion } from "@/utils/constants";
 import Region from "./[region]/page";
 
 type Props = {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
-const Home = ({ params }: Props) => {
-  const locale = params.locale ?? i18nConfig.defaultLocale;
-  return <Region params={{ locale, region: defaultRegion }} />;
+const Home = async (props: Props) => {
+  const params = await props.params;
+  const regionParams = Promise.resolve({
+    locale: params.locale,
+    region: defaultRegion,
+  });
+  return <Region params={regionParams} />;
 };
 
 // Reuse the metadata generation from the region page
