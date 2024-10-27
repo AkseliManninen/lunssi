@@ -12,15 +12,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy Backend to Fly.io
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+        run: |
+          cd backend
+          flyctl deploy --app $FLY_APP_NAME --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           FLY_APP_NAME: ${{ secrets.FLY_BACKEND_APP_NAME }}
-        run: |
-          flyctl deploy --app $FLY_APP_NAME --remote-only
 
   # Job to deploy the frontend
   deploy_frontend:
@@ -28,12 +31,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy Frontend to Fly.io
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+        run: |
+          cd frontend
+          flyctl deploy --app $FLY_APP_NAME --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           FLY_APP_NAME: ${{ secrets.FLY_FRONTEND_APP_NAME }}
-        run: |
-          flyctl deploy --app $FLY_APP_NAME --remote-only
