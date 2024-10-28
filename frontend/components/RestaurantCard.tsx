@@ -2,6 +2,7 @@
 
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import ChevronUpIcon from "@/assets/icons/chevron-up.svg";
+import StudentIcon from "@/assets/icons/graduation-cap.svg";
 import type React from "react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,6 +12,7 @@ export interface RestaurantCardProps {
   lunchItems: string[];
   lunchPrice: string;
   lunchTime: string;
+  isStudentCantine: boolean;
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
@@ -18,6 +20,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   lunchItems,
   lunchPrice,
   lunchTime,
+  isStudentCantine,
 }) => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -51,7 +54,17 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full">
       <div className="px-6 py-4 flex-grow">
-        <h2 className="font-bold text-xl mb-4 text-gray-800">{name}</h2>
+        <h2 className="font-bold text-xl mb-4 text-gray-800 flex items-center gap-2">
+          {name}
+          {isStudentCantine && (
+            <div className="relative group">
+              <StudentIcon className="cursor-help" />
+              <div className="absolute invisible group-hover:visible bg-gray-800 text-white text-sm rounded py-1 px-2 w-32">
+                {t("studentCantine")}
+              </div>
+            </div>
+          )}
+        </h2>
         <ul className="space-y-2 mb-4">
           {displayedItems.map((item) => (
             <li key={item} className="flex items-start">

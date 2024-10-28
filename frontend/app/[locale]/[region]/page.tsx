@@ -56,15 +56,24 @@ const Region = async (props: Props) => {
             <LanguageChanger />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {restaurants.map(({ name, lunchItems, lunchPrice, lunchTime }) => (
-              <RestaurantCard
-                key={name}
-                name={name}
-                lunchItems={lunchItems}
-                lunchPrice={lunchPrice}
-                lunchTime={lunchTime}
-              />
-            ))}
+            {restaurants.map(
+              ({
+                name,
+                lunchItems,
+                lunchPrice,
+                lunchTime,
+                isStudentCantine,
+              }) => (
+                <RestaurantCard
+                  key={name}
+                  name={name}
+                  lunchItems={lunchItems}
+                  lunchPrice={lunchPrice}
+                  lunchTime={lunchTime}
+                  isStudentCantine={isStudentCantine}
+                />
+              ),
+            )}
           </div>
         </div>
       </div>

@@ -24,6 +24,7 @@ class RestaurantScraper:
             "en": url,
         }
         self.region = "kamppi"
+        self.is_student_cantine = False
 
     def get_day_name(self, lang="fi"):
         english_days = [
@@ -99,9 +100,15 @@ class RestaurantScraper:
                 menu = self.parse_json_menu(content, lang)
             else:
                 raise ValueError("Unsupported format. Use 'html', 'pdf', or 'json'.")
-            return self.name, menu, self.lunch_price, self.lunch_available
+            return self.name, menu, self.lunch_price, self.lunch_available, self.is_student_cantine
         except Exception as e:
-            return self.name, self.fallback_menu[lang], self.lunch_price, self.lunch_available
+            return (
+                self.name,
+                self.fallback_menu[lang],
+                self.lunch_price,
+                self.lunch_available,
+                self.is_student_cantine,
+            )
 
 
 class BruuveriScraper(RestaurantScraper):
@@ -177,6 +184,7 @@ class HankenScraper(RestaurantScraper):
             "fi": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
             "en": "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=en",
         }
+        self.is_student_cantine = True
 
     def parse_json_menu(self, data, lang):
         today = datetime.now().date()
@@ -213,6 +221,7 @@ class HamisScraper(RestaurantScraper):
             "2,95€",
             "11:00 - 15:00",
         )
+        self.is_student_cantine = True
 
     def parse_menu(self, soup, lang):
         today_row = soup.find("div", class_="row row-today")
