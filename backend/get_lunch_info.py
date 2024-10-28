@@ -292,11 +292,11 @@ class QueemScraper(RestaurantScraper):
         today = datetime.now().strftime("%A")
         if today not in ["Saturday", "Sunday"]:
             day_mapping = {
-                "Monday": "Lunch2-Monday-20.8-uudistettu.pdf",
-                "Tuesday": "Lunch2-Tuesday-20.8-uudistettu.pdf",
-                "Wednesday": "Lunch2-wednesday-20.8-uudistettu.pdf",
-                "Thursday": "lunch2-thursday-20.8-uudistettu-PDF.pdf",
-                "Friday": "lunch2-friday-20.8-uudistettu.pdf",
+                "Monday": "Monday-lunch-29.7-uudistettu.pdf",
+                "Tuesday": "Tuesday-lunch-29.7-uudistettu.pdf",
+                "Wednesday": "Wednesday-lunch-29.7-uudistettu.pdf",
+                "Thursday": "Thursday-Menu-29.7-uudistettu.pdf",
+                "Friday": "Friday-lunch-29.7-uudistettu.pdf",
             }
             return f"{self.url}{day_mapping[today]}"
         else:
