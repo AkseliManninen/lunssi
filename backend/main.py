@@ -40,7 +40,7 @@ async def hello_fly():
 
 def structure_response(result, name=""):
     if isinstance(result, tuple):
-        full_name, menu, lunch_price, lunch_available = result
+        full_name, menu, lunch_price, lunch_available, is_student_cantine = result
     else:
         logging.error(f"Error getting lunch info for {name}: {result}")
         full_name = name if name else "Restaurant not found"
@@ -53,6 +53,7 @@ def structure_response(result, name=""):
         "lunchItems": menu,
         "lunchPrice": lunch_price,
         "lunchTime": lunch_available,
+        "isStudentCantine": is_student_cantine,
     }
 
 
