@@ -52,14 +52,14 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full">
+    <div className="bg-white rounded-lg shadow-md overflow-visible transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full">
       <div className="px-6 py-4 flex-grow">
         <h2 className="font-bold text-xl mb-4 text-gray-800 flex items-center gap-2">
           {name}
           {isStudentCantine && (
             <div className="relative group">
               <StudentIcon className="cursor-help" />
-              <div className="absolute invisible group-hover:visible bg-gray-800 text-white text-sm rounded py-1 px-2 w-32">
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded py-1 px-2 w-32">
                 {t("studentCantine")}
               </div>
             </div>
