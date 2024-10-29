@@ -1,0 +1,16 @@
+name: Revalidate Pages
+
+on:
+  schedule:
+    # Revalidate once per day at midnight UTC
+    - cron: '0 0 * * *'
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  revalidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger revalidation
+        run: |
+          curl -X GET 'https://lunssi.fly.dev/api/revalidate?token=${{ secrets.REVALIDATION_TOKEN }}'
