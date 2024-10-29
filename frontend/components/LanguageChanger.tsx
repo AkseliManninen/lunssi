@@ -7,7 +7,7 @@ import type { ChangeEvent } from "react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import i18nConfig from "@/i18nConfig";
+import i18nConfig, { defaultLocale } from "@/i18nConfig";
 
 const LanguageChanger = () => {
   const currentLocale = useCurrentLocale(i18nConfig);
@@ -25,10 +25,7 @@ const LanguageChanger = () => {
     document.cookie = `NEXT_LOCALE=${newLocale};expires=${date.toUTCString()};path=/`;
 
     // redirect to the new locale path
-    if (
-      currentLocale === i18nConfig.defaultLocale &&
-      !i18nConfig.prefixDefault
-    ) {
+    if (currentLocale === defaultLocale && !i18nConfig.prefixDefault) {
       router.push(`/${newLocale}${currentPathname}`);
     } else {
       router.push(

@@ -12,13 +12,6 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Lunssi",
   },
-  alternates: {
-    canonical: "https://lunssi.fly.dev",
-    languages: {
-      en: "https://lunssi.fly.dev/en",
-      fi: "https://lunssi.fly.dev",
-    },
-  },
 };
 
 export function generateStaticParams() {
