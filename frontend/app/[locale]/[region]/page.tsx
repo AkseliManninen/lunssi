@@ -5,6 +5,7 @@ import RestaurantCard from "@/components/RestaurantCard";
 import TranslationsProvider from "@/components/TranslationProvider";
 import { getRestaurantData } from "@/lib/restaurants";
 import { regions } from "@/utils/constants";
+import { getLocalizedLink } from "@/utils/helpers";
 import type { Metadata } from "next";
 import React from "react";
 
@@ -24,6 +25,13 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
     openGraph: {
       description: t("metaDescription"),
       locale,
+    },
+    alternates: {
+      canonical: getLocalizedLink("https://lunssi.fly.dev", locale),
+      languages: {
+        fi: "https://lunssi.fly.dev",
+        en: "https://lunssi.fly.dev/en",
+      },
     },
   };
 };

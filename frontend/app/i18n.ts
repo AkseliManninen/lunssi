@@ -1,4 +1,4 @@
-import i18nConfig from "@/i18nConfig";
+import i18nConfig, { defaultLocale } from "@/i18nConfig";
 import { type Resource, createInstance, type i18n } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
@@ -25,7 +25,7 @@ export default async function initTranslations(
   await instance.init({
     lng: locale,
     resources,
-    fallbackLng: i18nConfig.defaultLocale,
+    fallbackLng: defaultLocale,
     supportedLngs: i18nConfig.locales,
     defaultNS: namespaces[0],
     fallbackNS: namespaces[0],
