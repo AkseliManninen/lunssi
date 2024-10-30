@@ -59,7 +59,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
           {isStudentCantine && (
             <div className="relative group">
               <StudentIcon className="cursor-help" />
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded py-1 px-2 w-32">
+              <div className="absolute top-full invisible group-hover:visible left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded py-1 px-2 w-32">
                 {t("studentCantine")}
               </div>
             </div>
