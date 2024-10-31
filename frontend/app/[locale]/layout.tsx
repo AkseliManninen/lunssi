@@ -1,6 +1,7 @@
 import i18nConfig from "@/i18nConfig";
 import type { ReactNode } from "react";
 import "@/styles/globals.css";
+import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -41,7 +42,10 @@ export default async function RootLayout(props: {
 
   return (
     <html lang={locale} className={roboto.className}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

@@ -6,5 +6,7 @@
   "language": "Kieli",
   "metaDescription": "Tutustu Helsingin Kampin alueen ravintoloiden lounaslistoihin",
   "region": "Alue",
-  "studentCantine": "Tämä on opiskelijaruokala"
+  "studentCantine": "Tämä on opiskelijaruokala",
+  "contributors": "Lunssi",
+  "sourceCode": "Katso GitHubissa"
 }
