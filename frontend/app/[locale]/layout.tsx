@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Lunssi",
   openGraph: {
     title: "Lunssi",
-    url: "https://lunssi.fly.dev",
+    url: "https://lunssi.fi",
     type: "website",
     siteName: "Lunssi",
   },
