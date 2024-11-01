@@ -54,7 +54,7 @@ const Region = async (props: Props) => {
       locale={locale}
       resources={resources}
     >
-      <div className="bg-gray-100 min-h-screen">
+      <div className="bg-gray-100 min-h-screen pb-8">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
             Lunssi
