@@ -27,10 +27,10 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
       locale,
     },
     alternates: {
-      canonical: getLocalizedLink("https://lunssi.fly.dev", locale),
+      canonical: getLocalizedLink("https://lunssi.fi", locale),
       languages: {
-        fi: "https://lunssi.fly.dev",
-        en: "https://lunssi.fly.dev/en",
+        fi: "https://lunssi.fi",
+        en: "https://lunssi.fi/en",
       },
     },
   };
