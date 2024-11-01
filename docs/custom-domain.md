@@ -12,7 +12,7 @@ Our custom domain `lunssi.fi` is bought from Domainkeskus. The following steps a
 
 1. Login to Domainkeskus.
 2. Navigate to Domains > Manage Domain > Manage DNS.
-3. Add A and AAA records for @ and www. The records can be found from fly.io.
+3. Add A and AAAA records for @ and www. The records can be found from fly.io.
 4. Add Domain ownership verification CNAME that can also be found from fly.io (this step might not be mandatory).
 
-Using CNAME could be simpler but A / AAA records worked with less effort in this case.
+Using CNAME could be simpler but A / AAAA records worked with less effort in this case.
