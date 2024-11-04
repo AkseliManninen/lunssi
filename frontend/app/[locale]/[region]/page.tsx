@@ -4,7 +4,7 @@ import RegionChanger from "@/components/RegionChanger";
 import RestaurantCard from "@/components/RestaurantCard";
 import TranslationsProvider from "@/components/TranslationProvider";
 import { getRestaurantData } from "@/lib/restaurants";
-import { regions } from "@/utils/constants";
+import { defaultRegion, regions } from "@/utils/constants";
 import { getLocalizedLink } from "@/utils/helpers";
 import type { Metadata } from "next";
 import React from "react";
@@ -38,9 +38,11 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
 export const generateStaticParams = async (props: Props) => {
   const params = await props.params;
-  return regions.map(({ id }) => {
-    return { locale: params.locale, region: id };
-  });
+  return regions
+    .filter(({ id }) => id !== defaultRegion)
+    .map(({ id }) => {
+      return { locale: params.locale, region: id };
+    });
 };
 
 const Region = async (props: Props) => {
