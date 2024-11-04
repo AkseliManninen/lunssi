@@ -1,7 +1,7 @@
 "use client";
 
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
-import { regions } from "@/utils/constants";
+import { defaultRegion, regions } from "@/utils/constants";
 import { usePathname, useRouter } from "next/navigation";
 import type { ChangeEvent } from "react";
 import React from "react";
@@ -21,7 +21,9 @@ const RegionChanger = ({ currentRegion }: Props) => {
     const newPath = pathname.includes(currentRegion)
       ? pathname.replace(currentRegion, newRegion)
       : `/${newRegion}`;
-    router.push(newPath);
+
+    // don't include default region in path
+    router.push(newPath.replace(`/${defaultRegion}`, "/"));
   };
 
   return (
