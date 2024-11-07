@@ -1,11 +1,9 @@
-"use client";
-
 import Github from "@/assets/icons/github.svg";
+import { getI18n } from "@/locales/server";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
-const Footer = () => {
-  const { t } = useTranslation();
+const Footer = async () => {
+  const t = await getI18n();
 
   return (
     <footer className="bg-gray-100 border-t border-gray-300 py-6">

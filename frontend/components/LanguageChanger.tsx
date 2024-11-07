@@ -1,40 +1,16 @@
 "use client";
 
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
-import { useCurrentLocale } from "next-i18n-router/client";
-import { usePathname, useRouter } from "next/navigation";
-import type { ChangeEvent } from "react";
+import { useI18n } from "@/locales/client";
+import { useChangeLocale, useCurrentLocale } from "@/locales/client";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
-import i18nConfig, { defaultLocale } from "@/i18nConfig";
+import i18nConfig from "@/i18nConfig";
 
 const LanguageChanger = () => {
-  const currentLocale = useCurrentLocale(i18nConfig);
-  const router = useRouter();
-  const currentPathname = usePathname();
-  const { t } = useTranslation();
-
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newLocale = e.target.value;
-
-    // set cookie for next-i18n-router
-    const days = 30;
-    const date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `NEXT_LOCALE=${newLocale};expires=${date.toUTCString()};path=/`;
-
-    // redirect to the new locale path
-    if (currentLocale === defaultLocale && !i18nConfig.prefixDefault) {
-      router.push(`/${newLocale}${currentPathname}`);
-    } else {
-      router.push(
-        currentPathname.replace(`/${currentLocale}`, `/${newLocale}`),
-      );
-    }
-
-    router.refresh();
-  };
+  const changeLocale = useChangeLocale();
+  const currentLocale = useCurrentLocale();
+  const t = useI18n();
 
   return (
     <div className="relative inline-block">
@@ -43,7 +19,7 @@ const LanguageChanger = () => {
       </label>
       <select
         id="language-switcher"
-        onChange={handleChange}
+        onChange={(e) => changeLocale(e.target.value as typeof currentLocale)}
         value={currentLocale}
         className="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
       >
