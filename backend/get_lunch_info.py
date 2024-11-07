@@ -385,7 +385,7 @@ class ValssiScraper(RestaurantScraper):
         if not menu_container:
             return self.fallback_menu[lang]
         today = datetime.today()
-        today_date = today.strftime("%d.%m.")
+        today_date = today.strftime("%-d.%-m.")
         day_sections = menu_container.find_all("div", class_="", recursive=False)
         for section in day_sections:
             day_header = section.find("h3", class_="h3")
