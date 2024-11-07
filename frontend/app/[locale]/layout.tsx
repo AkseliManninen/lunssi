@@ -1,10 +1,9 @@
-import i18nConfig from "@/i18nConfig";
 import type { ReactNode } from "react";
 import "@/styles/globals.css";
 import Footer from "@/components/Footer";
+import { getStaticParams } from "@/locales/server";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Lunssi",
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-  return i18nConfig.locales.map((locale) => ({ locale }));
+  return getStaticParams();
 }
 
 const roboto = Roboto({
@@ -35,10 +34,6 @@ export default async function RootLayout(props: {
   const { locale } = params;
 
   const { children } = props;
-
-  if (!i18nConfig.locales.includes(locale)) {
-    notFound();
-  }
 
   return (
     <html lang={locale} className={roboto.className}>

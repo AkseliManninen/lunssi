@@ -1,11 +1,11 @@
 "use client";
 
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
+import { useI18n } from "@/locales/client";
 import { defaultRegion, regions } from "@/utils/constants";
 import { usePathname, useRouter } from "next/navigation";
 import type { ChangeEvent } from "react";
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 interface Props {
   currentRegion: string;
@@ -14,7 +14,7 @@ interface Props {
 const RegionChanger = ({ currentRegion }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { t } = useTranslation();
+  const t = useI18n();
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newRegion = e.target.value;

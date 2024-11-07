@@ -3,9 +3,9 @@
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import ChevronUpIcon from "@/assets/icons/chevron-up.svg";
 import StudentIcon from "@/assets/icons/graduation-cap.svg";
+import { useI18n } from "@/locales/client";
 import type React from "react";
 import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export interface RestaurantCardProps {
   name: string;
@@ -22,7 +22,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   lunchTime,
   isStudentCantine,
 }) => {
-  const { t } = useTranslation();
+  const t = useI18n();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const maxCharacters = 300;
