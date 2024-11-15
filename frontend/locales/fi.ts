@@ -5,7 +5,7 @@ export default {
   showLess: "Näytä vähemmän",
   language: "Kieli",
   metaDescription:
-    "Tutustu Helsingin Kampin alueen ravintoloiden lounaslistoihin",
+    "Tutustu Helsingin ja Tampereen keskustan alueen ravintoloiden lounaslistoihin",
   region: "Alue",
   studentCantine: "Tämä on opiskelijaruokala",
   contributors: "Lunssi",
