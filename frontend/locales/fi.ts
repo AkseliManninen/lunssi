@@ -1,13 +1,14 @@
 export default {
-  price: "Hinta",
-  lunchAvailable: "Lounas saatavilla",
-  showMore: "Näytä lisää",
-  showLess: "Näytä vähemmän",
+  contactUs: "Ota yhteyttä",
+  contributors: "Lunssi",
   language: "Kieli",
+  lunchAvailable: "Lounas saatavilla",
   metaDescription:
     "Tutustu Helsingin ja Tampereen keskustan alueen ravintoloiden lounaslistoihin",
+  price: "Hinta",
   region: "Alue",
-  studentCantine: "Tämä on opiskelijaruokala",
-  contributors: "Lunssi",
+  showMore: "Näytä lisää",
+  showLess: "Näytä vähemmän",
   sourceCode: "Katso GitHubissa",
+  studentCantine: "Tämä on opiskelijaruokala",
 } as const;
