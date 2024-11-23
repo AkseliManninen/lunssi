@@ -4,6 +4,8 @@
 
 Lunssi is a website displaying lunch menus near the Helsinki and Tampere centrums. The list of supported restaurants is ever expanding. Visit https://lunssi.fi.
 
+Feel free to propose new restaurants or contact us for anything else at contact@lunssi.fi.
+
 ## Installation
 
 - Install [Task](https://taskfile.dev/installation/)
