@@ -1,13 +1,14 @@
 export default {
-  price: "Price",
-  lunchAvailable: "Lunch available",
-  showMore: "Show more",
-  showLess: "Show less",
+  contactUs: "Contact us",
+  contributors: "Lunssi",
   language: "Language",
+  lunchAvailable: "Lunch available",
   metaDescription:
     "Explore lunch menus from restaurants in Helsinki's and Tampere's central areas",
+  price: "Price",
   region: "Region",
-  studentCantine: "This is a student cantine",
-  contributors: "Lunssi",
+  showMore: "Show more",
+  showLess: "Show less",
   sourceCode: "View on GitHub",
+  studentCantine: "This is a student cantine",
 } as const;

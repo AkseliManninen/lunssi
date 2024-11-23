@@ -13,7 +13,9 @@ const Footer = async () => {
             &copy; {new Date().getFullYear()} {t("contributors")}
           </span>
         </div>
-
+        <div className="flex items-center space-x-2 text-gray-600">
+          <span className="text-sm">{t("contactUs")} - contact@lunssi.fi</span>
+        </div>
         <div className="flex items-center space-x-4">
           <a
             href="https://github.com/AkseliManninen/lunssi"
