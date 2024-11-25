@@ -36,7 +36,7 @@ export default async function RootLayout(props: {
 
   const { children } = props;
 
-  const gtmId = process.env.NEXT_PUBLIC_GA_TRACKING_ID ?? "";
+  const gtmId = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? "";
 
   return (
     <html lang={locale} className={roboto.className}>
