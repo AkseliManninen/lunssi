@@ -292,24 +292,23 @@ class QueemScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
             "Quê Em",
-            "https://queem.fi/wp-content/uploads/2024/10/",
+            "https://queem.fi/menu/lounas/",
             "13,50€ - 16,90€",
             "11:00 - 14:00",
         )
 
-    def get_pdf_url(self):
-        today = datetime.now().strftime("%A")
-        if today not in ["Saturday", "Sunday"]:
-            day_mapping = {
-                "Monday": "Monday-lunch-29.7-uudistettu.pdf",
-                "Tuesday": "Tuesday-lunch-29.7-uudistettu.pdf",
-                "Wednesday": "Wednesday-lunch-29.7-uudistettu.pdf",
-                "Thursday": "Thursday-Menu-29.7-uudistettu.pdf",
-                "Friday": "Friday-lunch-29.7-uudistettu.pdf",
-            }
-            return f"{self.url}{day_mapping[today]}"
-        else:
-            return None
+    async def get_pdf_url(self):
+        content = await self.fetch_html_content(lang="fi")
+        soup = BeautifulSoup(content, "html.parser")
+
+        today_finnish = self.get_day_name(lang="fi")
+
+        menu_links = soup.find_all("a", class_="wp-block-button__link")
+
+        for link in menu_links:
+            if today_finnish in link.text:
+                return link["href"]
+        return None
 
     def parse_pdf_menu(self, text, lang):
         lines = text.split("\n")
@@ -330,9 +329,9 @@ class QueemScraper(RestaurantScraper):
 
         return lunch_items if lunch_items else self.fallback_menu[lang]
 
-    def get_lunch_info(self, lang="fi", format="pdf"):
-        self.url = self.get_pdf_url()
-        return super().get_lunch_info(lang, format)
+    async def get_lunch_info(self, lang="fi", format="pdf"):
+        self.url = await self.get_pdf_url()
+        return await super().get_lunch_info(lang, format)
 
 
 class StahlbergScraper(RestaurantScraper):
