@@ -177,7 +177,7 @@ class HankenScraper(RestaurantScraper):
         super().__init__(
             "Hanken",
             "https://www.compass-group.fi/menuapi/feed/json?costNumber=3406&language=fi",
-            "2,95€",
+            "2,80€",
             "11:00 - 15:00",
         )
         self.lang_urls = {
