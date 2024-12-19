@@ -1,2 +1,4 @@
 User-Agent: *
 Allow: /
+
+Sitemap: https://lunssi.fi/sitemap.xml
