@@ -35,7 +35,7 @@ const RegionChanger = ({ currentRegion }: Props) => {
         id="region-switcher"
         onChange={handleChange}
         value={currentRegion}
-        className="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        className="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
       >
         {regions.map(({ id, label }) => (
           <option key={id} value={id} className="py-1">
