@@ -7,7 +7,7 @@ httpx==0.28.1
 pip==24.3.1
 pre_commit==4.0.1
 PyMuPDF==1.24.13
-setuptools==75.8.0
+setuptools==80.1.0
 soupsieve==2.6
 uvicorn==0.34.0  
 wheel==0.45.1
