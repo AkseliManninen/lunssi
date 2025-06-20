@@ -3,6 +3,7 @@
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import ChevronUpIcon from "@/assets/icons/chevron-up.svg";
 import StudentIcon from "@/assets/icons/graduation-cap.svg";
+import DiscountIcon from "@/assets/icons/discount.svg";
 import { useI18n } from "@/locales/client";
 import type React from "react";
 import { useMemo, useState } from "react";
@@ -13,6 +14,7 @@ export interface RestaurantCardProps {
   lunchPrice: string;
   lunchTime: string;
   isStudentCantine: boolean;
+  discount?: string
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
@@ -21,6 +23,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   lunchPrice,
   lunchTime,
   isStudentCantine,
+  discount
 }) => {
   const t = useI18n();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -38,12 +41,16 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
         break;
       }
     }
+    
+    const onlyOneItem = lunchItems.length === 1;
 
     return {
-      displayedItems: isExpanded
+      displayedItems: onlyOneItem
         ? lunchItems
-        : lunchItems.slice(0, cutoffIndex),
-      needsExpansion: totalLength > maxCharacters,
+        : isExpanded
+          ? lunchItems
+          : lunchItems.slice(0, cutoffIndex),
+      needsExpansion: !onlyOneItem && totalLength > maxCharacters,
     };
   }, [lunchItems, isExpanded]);
 
@@ -61,6 +68,14 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
               <StudentIcon className="cursor-help" />
               <div className="absolute top-full invisible group-hover:visible left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded-sm py-1 px-2 w-32">
                 {t("studentCantine")}
+              </div>
+            </div>
+          )}
+          {discount && (
+            <div className="relative group">
+              <DiscountIcon className="cursor-help" />
+              <div className="absolute top-full invisible group-hover:visible left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded-sm py-1 px-2 w-32">
+                {discount}
               </div>
             </div>
           )}
