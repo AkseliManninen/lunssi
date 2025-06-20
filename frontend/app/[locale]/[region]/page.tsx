@@ -51,7 +51,7 @@ const Region = async (props: Props) => {
   const restaurants = await getRestaurantData(locale, region);
   return (
     <I18nProviderClient locale={locale}>
-      <div className="bg-gray-100 min-h-screen pb-8">
+      <main className="bg-gray-100 min-h-screen pb-8">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
             Lunssi
@@ -81,7 +81,7 @@ const Region = async (props: Props) => {
             )}
           </div>
         </div>
-      </div>
+      </main>
     </I18nProviderClient>
   );
 };
