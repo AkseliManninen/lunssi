@@ -25,6 +25,10 @@ class RestaurantScraper:
         }
         self.region = "kamppi"
         self.is_student_cantine = False
+        self.discount = {
+            "fi": "",
+            "en": ""
+        }
 
     def get_day_name(self, lang="fi"):
         english_days = [
@@ -106,6 +110,7 @@ class RestaurantScraper:
                 self.lunch_price,
                 self.lunch_available,
                 self.is_student_cantine,
+                self.discount[lang],
             )
         except Exception as e:
             return (
@@ -114,6 +119,7 @@ class RestaurantScraper:
                 self.lunch_price,
                 self.lunch_available,
                 self.is_student_cantine,
+                self.discount[lang],
             )
 
 
@@ -417,6 +423,33 @@ class ValssiScraper(RestaurantScraper):
                 return menu_items
         return self.fallback_menu[lang]
 
+class FaasaiScraper(RestaurantScraper):
+    def __init__(self):
+        super().__init__(
+            "Faasai Koskikatu",
+            "https://www.faasairavintola.fi/koskikatu.html",
+            "13,50€",
+            "11:00 - 15:00",
+        )
+        self.region = "tampere"
+        self.discount = {
+            "fi": "1€ alennus lounaasta, kun tiskillä mainitsee Futuricen",
+            "en": "1€ discount on lunch when mentioning Futurice at the counter",
+        }
+
+    def parse_menu(self, soup, lang):
+        paragraphs = soup.find_all("p")
+        menu_item = []
+
+        if not paragraphs:
+            return self.fallback_menu[lang]
+
+				# Find the paragraph from paragraphs that contains "Perinteinen Faasain thaimaalainen"
+        for paragraph in paragraphs:
+           if "Perinteinen Faasain thaimaalainen" in paragraph.text:
+              menu_item = paragraph.text.split("\n")
+
+        return menu_item
 
 class KarljohanScraper(RestaurantScraper):
     def __init__(self):
@@ -468,6 +501,7 @@ def get_restaurants_by_region(region="kamppi"):
         "queem": QueemScraper(),
         "stahlberg": StahlbergScraper(),
         "valssi": ValssiScraper(),
+        "faasai": FaasaiScraper(),
     }
     return {name: scraper for name, scraper in all_scrapers.items() if scraper.region == region}
 
