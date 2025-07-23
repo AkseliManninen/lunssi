@@ -1,5 +1,5 @@
-from scrapers.faasai import FaasaiScraper
 from scrapers.bruuveri import BruuveriScraper
+from scrapers.faasai import FaasaiScraper
 from scrapers.hamis import HamisScraper
 from scrapers.hanken import HankenScraper
 from scrapers.kansis import KansisScraper
@@ -15,8 +15,8 @@ def get_all_scrapers():
     return {
         "bruuveri": BruuveriScraper(),
         "faasai": FaasaiScraper(),
+        "hamis": HamisScraper(),
         "hanken": HankenScraper(),
-        "hämis": HamisScraper(),
         "kansis": KansisScraper(),
         "karljohan": KarljohanScraper(),
         "plaza": PlazaScraper(),
