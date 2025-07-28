@@ -9,6 +9,7 @@ class QueemScraper(RestaurantScraper):
         super().__init__(
             "Quê Em",
             "https://queem.fi/menu/lounas/",
+            "https://maps.app.goo.gl/aKbHnw472ULKRTFu8",
             "13,50€ - 16,90€",
             "11:00 - 14:00",
         )

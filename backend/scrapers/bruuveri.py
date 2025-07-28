@@ -7,6 +7,7 @@ class BruuveriScraper(RestaurantScraper):
         super().__init__(
             "Bruuveri",
             "https://www.bruuveri.fi/lounas-menu/",
+            "https://maps.app.goo.gl/12KwLxcWQpDfnMAYA",
             "14,50€ (Buffet), 13€ (Light lunch)",
             "11:00 - 14:00",
         )

@@ -8,6 +8,7 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
         super().__init__(
             "Pompier Albertinkatu",
             "https://pompier.fi/albertinkatu/albertinkatu-menu/",
+            "https://maps.app.goo.gl/qDBhp7ExBvGfmPUb9",
             "14 - 19€",
             "10:45 - 14:00",
         )

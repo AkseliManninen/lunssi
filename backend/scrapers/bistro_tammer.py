@@ -8,6 +8,7 @@ class BistroTammerScraper(RestaurantScraper):
         super().__init__(
             "Bistro Tammer",
             "https://www.raflaamo.fi/fi/ravintola/tampere/bistro-tammer/menu/lounas",
+            "https://maps.app.goo.gl/s9TVqXzCEFHiQUBd6",
             "13,70€ (Soup), 15,50€ (Buffet)",
             "11:00 - 13:00",
         )

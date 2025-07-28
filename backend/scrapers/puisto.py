@@ -8,6 +8,7 @@ class PuistoScraper(RestaurantScraper):
         super().__init__(
             "Puisto",
             "https://www.raflaamo.fi/fi/ravintola/tampere/puisto/menu/lounas",
+            "https://maps.app.goo.gl/svbC5hrvCpxYr2HD8",
             "13,50 - 14,90€",
             "11:00 - 14:30",
         )

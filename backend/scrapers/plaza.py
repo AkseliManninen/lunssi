@@ -7,6 +7,7 @@ class PlazaScraper(RestaurantScraper):
         super().__init__(
             "Plaza",
             "https://www.ardenrestaurants.fi/menut/plaza/index.php",
+            "https://maps.app.goo.gl/CCWRJBaUQDfjVroE9",
             "14,50€",
             "10:30 - 14:00",
         )

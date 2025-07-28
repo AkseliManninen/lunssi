@@ -7,6 +7,7 @@ class HamisScraper(RestaurantScraper):
         super().__init__(
             "Hämäläis-Osakunta",
             "https://hys.net/osakuntabaari/ruokalista/",
+            "https://maps.app.goo.gl/dUYzeugzayHzYicN7",
             "2,95€",
             "11:00 - 15:00",
         )

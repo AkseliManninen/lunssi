@@ -7,6 +7,7 @@ class KarljohanScraper(RestaurantScraper):
         super().__init__(
             "Karljohan",
             "https://www.ravintolakarljohan.fi/lounas-fi/lounas/",
+            "https://maps.app.goo.gl/eH9CmRTSSFZCRAzh8",
             "13,70 - 25€",
             "10:30 - 15:00",
         )

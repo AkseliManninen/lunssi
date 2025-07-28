@@ -6,24 +6,25 @@ from datetime import datetime
 
 
 class RestaurantScraper:
-    def __init__(self, name, url, lunch_price, lunch_available):
+    def __init__(self, name, url, location, lunch_price, lunch_available):
         self.date_str = datetime.now().strftime("%-d.%-m")
+        self.discount = {"fi": "", "en": ""}
         self.fallback_menu = {
             "fi": ["Tämän päivän lounasta ei löytynyt."],
             "en": ["Today's lunch menu not found."],
         }
         self.headers = {"User-Agent": "Mozilla/5.0"}
-        self.name = name
-        self.lunch_available = lunch_available
-        self.lunch_price = lunch_price
-        self.url = url
+        self.is_student_cantine = False
         self.lang_urls = {
             "fi": url,
             "en": url,
         }
+        self.location = location
+        self.lunch_available = lunch_available
+        self.lunch_price = lunch_price
+        self.name = name
         self.region = "kamppi"
-        self.is_student_cantine = False
-        self.discount = {"fi": "", "en": ""}
+        self.url = url
 
     def get_day_name(self, lang="fi"):
         english_days = [

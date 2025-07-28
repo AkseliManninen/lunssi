@@ -7,6 +7,7 @@ class FaasaiScraper(RestaurantScraper):
         super().__init__(
             "Faasai Koskikatu",
             "https://www.faasairavintola.fi/koskikatu.html",
+            "https://maps.app.goo.gl/Ec949wqMiJvJX7v4A",
             "13,50€",
             "11:00 - 15:00",
         )
