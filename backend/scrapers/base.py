@@ -91,6 +91,7 @@ class RestaurantScraper:
             return (
                 self.name,
                 menu,
+                self.location,
                 self.lunch_price,
                 self.lunch_available,
                 self.is_student_cantine,
@@ -100,6 +101,7 @@ class RestaurantScraper:
             return (
                 self.name,
                 self.fallback_menu[lang],
+                self.location,
                 self.lunch_price,
                 self.lunch_available,
                 self.is_student_cantine,

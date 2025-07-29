@@ -5,6 +5,7 @@ export default {
   lunchAvailable: "Lunch available",
   metaDescription:
     "Explore lunch menus from restaurants in Helsinki's and Tampere's central areas",
+  openInMaps: "Open the location in Google Maps",
   price: "Price",
   region: "Region",
   showMore: "Show more",
