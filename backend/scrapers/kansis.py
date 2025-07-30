@@ -8,6 +8,7 @@ class KansisScraper(RestaurantScraper):
         super().__init__(
             "Kansis",
             "https://ravintolakansis.fi/lounas/",
+            "https://maps.app.goo.gl/mbjMPQnfLZEYHobS9",
             "12.90 - 14.40€",
             "11:00 - 14:00",
         )

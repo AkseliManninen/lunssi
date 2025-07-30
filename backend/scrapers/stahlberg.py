@@ -7,6 +7,7 @@ class StahlbergScraper(RestaurantScraper):
         super().__init__(
             "Ståhlberg Tampella",
             "https://www.stahlbergkahvilat.fi/stahlberg-tampella/",
+            "https://maps.app.goo.gl/G4tBvRLy1q3VZCns5",
             "13,50€ (Buffet)",
             "10:30 - 15:00",
         )

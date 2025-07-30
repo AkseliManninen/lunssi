@@ -2,28 +2,31 @@
 
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import ChevronUpIcon from "@/assets/icons/chevron-up.svg";
-import StudentIcon from "@/assets/icons/graduation-cap.svg";
 import DiscountIcon from "@/assets/icons/discount.svg";
+import StudentIcon from "@/assets/icons/graduation-cap.svg";
+import LocationIcon from "@/assets/icons/map-pin.svg";
 import { useI18n } from "@/locales/client";
 import type React from "react";
 import { useMemo, useState } from "react";
 
 export interface RestaurantCardProps {
-  name: string;
+  discount?: string;
+  isStudentCantine: boolean;
+  location: string;
   lunchItems: string[];
   lunchPrice: string;
   lunchTime: string;
-  isStudentCantine: boolean;
-  discount?: string
+  name: string;
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
-  name,
+  discount,
+  isStudentCantine,
+  location,
   lunchItems,
   lunchPrice,
   lunchTime,
-  isStudentCantine,
-  discount
+  name,
 }) => {
   const t = useI18n();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -41,7 +44,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
         break;
       }
     }
-    
+
     const onlyOneItem = lunchItems.length === 1;
 
     return {
@@ -63,22 +66,31 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
       <div className="px-6 py-4 grow">
         <h2 className="font-bold text-xl mb-4 text-gray-800 flex items-center gap-2">
           {name}
-          {isStudentCantine && (
-            <div className="relative group">
-              <StudentIcon className="cursor-help" />
-              <div className="absolute top-full invisible group-hover:visible left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded-sm py-1 px-2 w-32">
-                {t("studentCantine")}
+          <div className="flex items-center gap-1">
+            {location && location.length > 0 && (
+              <div className="relative group">
+                <a
+                  href={location}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-pointer"
+                >
+                  <LocationIcon className="cursor-pointer" />
+                </a>
+                <div className="absolute top-full mt-1 invisible group-hover:visible left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap z-10 shadow-md">
+                  {t("openInMaps")}
+                </div>
               </div>
-            </div>
-          )}
-          {discount && (
-            <div className="relative group">
-              <DiscountIcon className="cursor-help" />
-              <div className="absolute top-full invisible group-hover:visible left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded-sm py-1 px-2 w-32">
-                {discount}
+            )}
+            {discount && (
+              <div className="relative group">
+                <DiscountIcon className="cursor-help" />
+                <div className="absolute top-full invisible group-hover:visible left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-sm rounded-sm py-1 px-2 w-32">
+                  {discount}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </h2>
         <ul className="space-y-2 mb-4">
           {displayedItems.map((item) => (

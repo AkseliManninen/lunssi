@@ -10,6 +10,7 @@ class ValssiScraper(RestaurantScraper):
         super().__init__(
             "Museoravintola Valssi",
             "https://www.vapriikki.fi/vieraile/museoravintola-valssi/lounaslista/",
+            "https://maps.app.goo.gl/bHBUWsAEYmctXzES8",
             "11,90€",
             "10:45 - 14:00",
         )

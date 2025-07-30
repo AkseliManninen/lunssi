@@ -5,6 +5,7 @@ export default {
   lunchAvailable: "Lounas saatavilla",
   metaDescription:
     "Tutustu Helsingin ja Tampereen keskustan alueen ravintoloiden lounaslistoihin",
+  openInMaps: "Avaa sijainti Google Mapsissa",
   price: "Hinta",
   region: "Alue",
   showMore: "Näytä lisää",
