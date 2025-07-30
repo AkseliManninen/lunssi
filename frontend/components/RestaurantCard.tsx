@@ -13,9 +13,9 @@ export interface RestaurantCardProps {
   discount?: string;
   isStudentCantine: boolean;
   location: string;
-  lunchItems: string[];
+  lunchHours: string;
   lunchPrice: string;
-  lunchTime: string;
+  menu: string[];
   name: string;
 }
 
@@ -23,9 +23,9 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   discount,
   isStudentCantine,
   location,
-  lunchItems,
+  lunchHours,
   lunchPrice,
-  lunchTime,
+  menu,
   name,
 }) => {
   const t = useI18n();
@@ -35,27 +35,27 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
 
   const { displayedItems, needsExpansion } = useMemo(() => {
     let totalLength = 0;
-    let cutoffIndex = lunchItems.length;
+    let cutoffIndex = menu.length;
 
-    for (let i = 0; i < lunchItems.length; i++) {
-      totalLength += lunchItems[i].length;
+    for (let i = 0; i < menu.length; i++) {
+      totalLength += menu[i].length;
       if (totalLength > maxCharacters && !isExpanded) {
         cutoffIndex = i;
         break;
       }
     }
 
-    const onlyOneItem = lunchItems.length === 1;
+    const onlyOneItem = menu.length === 1;
 
     return {
       displayedItems: onlyOneItem
-        ? lunchItems
+        ? menu
         : isExpanded
-          ? lunchItems
-          : lunchItems.slice(0, cutoffIndex),
+          ? menu
+          : menu.slice(0, cutoffIndex),
       needsExpansion: !onlyOneItem && totalLength > maxCharacters,
     };
-  }, [lunchItems, isExpanded]);
+  }, [menu, isExpanded]);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -127,7 +127,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
           </p>
           <p>
             <span className="font-medium">{t("lunchAvailable")}:</span>{" "}
-            {lunchTime}
+            {lunchHours}
           </p>
         </div>
       </div>

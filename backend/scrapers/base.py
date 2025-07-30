@@ -6,13 +6,9 @@ from datetime import datetime
 
 
 class RestaurantScraper:
-    def __init__(self, name, url, location, lunch_price, lunch_available):
+    def __init__(self, name, url, location, lunch_price, lunch_hours):
         self.date_str = datetime.now().strftime("%-d.%-m")
         self.discount = {"fi": "", "en": ""}
-        self.fallback_menu = {
-            "fi": ["Tämän päivän lounasta ei löytynyt."],
-            "en": ["Today's lunch menu not found."],
-        }
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.is_student_cantine = False
         self.lang_urls = {
@@ -20,8 +16,12 @@ class RestaurantScraper:
             "en": url,
         }
         self.location = location
-        self.lunch_available = lunch_available
+        self.lunch_hours = lunch_hours
         self.lunch_price = lunch_price
+        self.menu_fallback = {
+            "fi": ["Tämän päivän lounasta ei löytynyt."],
+            "en": ["Today's lunch menu not found."],
+        }
         self.name = name
         self.region = "kamppi"
         self.url = url
@@ -75,35 +75,37 @@ class RestaurantScraper:
             if format == "html":
                 content = await self.fetch_html_content(lang)
                 soup = BeautifulSoup(content, "html.parser")
-                menu = self.parse_menu(soup, lang)
+                self.menu = self.parse_menu(soup, lang)
             elif format == "pdf":
                 if self.url:
                     pdf_content = await self.fetch_pdf_content(self.url)
                     text = self.extract_text_from_pdf(pdf_content)
-                    menu = self.parse_pdf_menu(text, lang)
+                    self.menu = self.parse_pdf_menu(text, lang)
                 else:
-                    menu = self.fallback_menu[lang]
+                    self.menu = self.menu_fallback[lang]
             elif format == "json":
                 content = await self.fetch_json_content(lang)
-                menu = self.parse_json_menu(content, lang)
+                self.menu = self.parse_json_menu(content, lang)
             else:
                 raise ValueError("Unsupported format.")
             return (
-                self.name,
-                menu,
-                self.location,
-                self.lunch_price,
-                self.lunch_available,
-                self.is_student_cantine,
                 self.discount[lang],
+                self.is_student_cantine,
+                self.location,
+                self.lunch_hours,
+                self.lunch_price,
+                self.menu,
+                self.name,
+                self.url,
             )
         except Exception:
             return (
-                self.name,
-                self.fallback_menu[lang],
-                self.location,
-                self.lunch_price,
-                self.lunch_available,
-                self.is_student_cantine,
                 self.discount[lang],
+                self.is_student_cantine,
+                self.location,
+                self.lunch_hours,
+                self.lunch_price,
+                self.menu_fallback[lang],
+                self.name,
+                self.url,
             )
