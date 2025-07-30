@@ -13,20 +13,22 @@ export interface RestaurantCardProps {
   discount?: string;
   isStudentCantine: boolean;
   location: string;
-  lunchItems: string[];
+  lunchHours: string;
   lunchPrice: string;
-  lunchTime: string;
+  menu: string[];
   name: string;
+  url: string;
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
   discount,
   isStudentCantine,
   location,
-  lunchItems,
+  lunchHours,
   lunchPrice,
-  lunchTime,
+  menu,
   name,
+  url,
 }) => {
   const t = useI18n();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -35,27 +37,27 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
 
   const { displayedItems, needsExpansion } = useMemo(() => {
     let totalLength = 0;
-    let cutoffIndex = lunchItems.length;
+    let cutoffIndex = menu.length;
 
-    for (let i = 0; i < lunchItems.length; i++) {
-      totalLength += lunchItems[i].length;
+    for (let i = 0; i < menu.length; i++) {
+      totalLength += menu[i].length;
       if (totalLength > maxCharacters && !isExpanded) {
         cutoffIndex = i;
         break;
       }
     }
 
-    const onlyOneItem = lunchItems.length === 1;
+    const onlyOneItem = menu.length === 1;
 
     return {
       displayedItems: onlyOneItem
-        ? lunchItems
+        ? menu
         : isExpanded
-          ? lunchItems
-          : lunchItems.slice(0, cutoffIndex),
+          ? menu
+          : menu.slice(0, cutoffIndex),
       needsExpansion: !onlyOneItem && totalLength > maxCharacters,
     };
-  }, [lunchItems, isExpanded]);
+  }, [menu, isExpanded]);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -65,7 +67,14 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
     <div className="bg-white rounded-lg shadow-md overflow-visible transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full">
       <div className="px-6 py-4 grow">
         <h2 className="font-bold text-xl mb-4 text-gray-800 flex items-center gap-2">
-          {name}
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline hover:text-blue-700 text-gray-800"
+          >
+            {name}
+          </a>
           <div className="flex items-center gap-1">
             {location && location.length > 0 && (
               <div className="relative group">
@@ -127,7 +136,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
           </p>
           <p>
             <span className="font-medium">{t("lunchAvailable")}:</span>{" "}
-            {lunchTime}
+            {lunchHours}
           </p>
         </div>
       </div>
