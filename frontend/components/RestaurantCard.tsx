@@ -17,6 +17,7 @@ export interface RestaurantCardProps {
   lunchPrice: string;
   menu: string[];
   name: string;
+  url: string;
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
@@ -27,6 +28,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   lunchPrice,
   menu,
   name,
+  url,
 }) => {
   const t = useI18n();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -65,7 +67,14 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
     <div className="bg-white rounded-lg shadow-md overflow-visible transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full">
       <div className="px-6 py-4 grow">
         <h2 className="font-bold text-xl mb-4 text-gray-800 flex items-center gap-2">
-          {name}
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline hover:text-blue-700 text-gray-800"
+          >
+            {name}
+          </a>
           <div className="flex items-center gap-1">
             {location && location.length > 0 && (
               <div className="relative group">

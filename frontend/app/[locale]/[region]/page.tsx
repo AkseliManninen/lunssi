@@ -70,6 +70,7 @@ const Region = async (props: Props) => {
                 lunchPrice,
                 menu,
                 name,
+                url,
               }) => (
                 <RestaurantCard
                   key={name}
@@ -80,6 +81,7 @@ const Region = async (props: Props) => {
                   lunchPrice={lunchPrice}
                   menu={menu}
                   name={name}
+                  url={url}
                 />
               ),
             )}

@@ -66,6 +66,7 @@ def structure_response(result, requested_name):
         "lunchPrice": lunch_price,
         "menu": menu,
         "name": name,
+        "url": url,
     }
 
 
