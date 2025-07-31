@@ -10,9 +10,7 @@ import Footer from "@/components/Footer";
 import { routing } from "@/i18n/routing";
 
 export const metadata: Metadata = {
-  title: "Lunssi",
   openGraph: {
-    title: "Lunssi",
     url: "https://lunssi.fi",
     type: "website",
     siteName: "Lunssi",

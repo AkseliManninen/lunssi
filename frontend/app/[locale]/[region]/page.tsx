@@ -17,8 +17,10 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const locale = params.locale;
   const t = await getTranslations();
   return {
+    title: t("metaTitle"),
     description: t("metaDescription"),
     openGraph: {
+      title: t("metaTitle"),
       description: t("metaDescription"),
       locale,
     },
