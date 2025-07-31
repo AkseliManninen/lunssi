@@ -111,7 +111,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
           <button
             type="button"
             onClick={toggleExpand}
-            className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center cursor-pointer"
           >
             {isExpanded ? (
               <>
