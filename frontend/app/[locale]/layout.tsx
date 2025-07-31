@@ -1,10 +1,13 @@
 import type { ReactNode } from "react";
 import "@/styles/globals.css";
-import Footer from "@/components/Footer";
-import { getStaticParams } from "@/locales/server";
 import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import { notFound } from "next/navigation";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
+import Footer from "@/components/Footer";
+import { routing } from "@/i18n/routing";
 
 export const metadata: Metadata = {
   title: "Lunssi",
@@ -17,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-  return getStaticParams();
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 const roboto = Roboto({
@@ -38,12 +41,22 @@ export default async function RootLayout(props: {
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? "";
 
+  const messages = await getMessages();
+
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
+
+  setRequestLocale(locale);
+
   return (
     <html lang={locale} className={roboto.className}>
       <GoogleTagManager gtmId={gtmId} />
       <body>
-        {children}
-        <Footer />
+        <NextIntlClientProvider messages={messages}>
+          {children}
+          <Footer />
+        </NextIntlClientProvider>
       </body>
     </html>
   );
