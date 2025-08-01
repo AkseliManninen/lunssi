@@ -1,7 +1,7 @@
 # Requirements
 beautifulsoup4==4.12.3
 black==24.10.0
-fastapi==0.115.8
+fastapi==0.116.1
 gunicorn==23.0.0 
 httpx==0.28.1
 pip==24.3.1
