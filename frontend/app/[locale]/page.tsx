@@ -1,5 +1,4 @@
 import { defaultRegion } from "@/utils/constants";
-import { setStaticParamsLocale } from "next-international/server";
 import Region from "./[region]/page";
 
 export const revalidate = 21600;
@@ -10,7 +9,6 @@ type Props = {
 
 const Home = async (props: Props) => {
   const { locale } = await props.params;
-  setStaticParamsLocale(locale);
   const regionParams = Promise.resolve({
     locale,
     region: defaultRegion,

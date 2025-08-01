@@ -1,9 +1,8 @@
+import { getTranslations } from "next-intl/server";
 import Github from "@/assets/icons/github.svg";
-import { getI18n } from "@/locales/server";
-import React from "react";
 
 const Footer = async () => {
-  const t = await getI18n();
+  const t = await getTranslations();
 
   return (
     <footer className="bg-gray-100 border-t border-gray-300 py-6">

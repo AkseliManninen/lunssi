@@ -2,7 +2,7 @@ pre-commit:
   commands:
     format-frontend:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: node frontend/node_modules/@biomejs/biome/bin/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files} --config-path frontend/biome.json
+      run: node frontend/node_modules/@biomejs/biome/bin/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
       stage_fixed: true
 
     format-backend:

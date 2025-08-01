@@ -1,6 +1,6 @@
-import type { RestaurantCardProps } from "@/components/RestaurantCard";
 import axios from "axios";
 import { cache } from "react";
+import type { RestaurantCardProps } from "@/components/RestaurantCard";
 
 export const getRestaurantData = cache(
   async (locale: string, region: string): Promise<RestaurantCardProps[]> => {

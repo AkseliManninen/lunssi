@@ -1,13 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import type React from "react";
+import { useMemo, useState } from "react";
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import ChevronUpIcon from "@/assets/icons/chevron-up.svg";
 import DiscountIcon from "@/assets/icons/discount.svg";
-import StudentIcon from "@/assets/icons/graduation-cap.svg";
 import LocationIcon from "@/assets/icons/map-pin.svg";
-import { useI18n } from "@/locales/client";
-import type React from "react";
-import { useMemo, useState } from "react";
 
 export interface RestaurantCardProps {
   discount?: string;
@@ -22,7 +21,6 @@ export interface RestaurantCardProps {
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
   discount,
-  isStudentCantine,
   location,
   lunchHours,
   lunchPrice,
@@ -30,7 +28,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   name,
   url,
 }) => {
-  const t = useI18n();
+  const t = useTranslations();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const maxCharacters = 300;
@@ -113,7 +111,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
           <button
             type="button"
             onClick={toggleExpand}
-            className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center cursor-pointer"
           >
             {isExpanded ? (
               <>

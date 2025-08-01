@@ -1,7 +1,7 @@
-import i18nConfig from "@/i18nConfig";
-import { regions } from "@/utils/constants";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { routing } from "@/i18n/routing";
+import { regions } from "@/utils/constants";
 
 // Add a secret token to prevent unauthorized revalidation
 const REVALIDATION_TOKEN = process.env.REVALIDATION_TOKEN;
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 
   try {
     // Revalidate the home page and all region pages for both languages
-    for (const locale of i18nConfig.locales) {
+    for (const locale of routing.locales) {
       // Revalidate base paths
       revalidatePath(`/${locale}`);
 
