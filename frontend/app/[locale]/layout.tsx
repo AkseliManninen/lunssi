@@ -4,8 +4,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { notFound } from "next/navigation";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import Footer from "@/components/Footer";
 import { routing } from "@/i18n/routing";
 
@@ -39,8 +38,6 @@ export default async function RootLayout(props: {
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? "";
 
-  const messages = await getMessages();
-
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -51,10 +48,8 @@ export default async function RootLayout(props: {
     <html lang={locale} className={roboto.className}>
       <GoogleTagManager gtmId={gtmId} />
       <body>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-          <Footer />
-        </NextIntlClientProvider>
+        {children}
+        <Footer />
       </body>
     </html>
   );
