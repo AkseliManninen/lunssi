@@ -28,7 +28,9 @@ class KansisScraper(RestaurantScraper):
         if lang == "fi":
             pattern_str = rf"{weekday}\s+{today.day}\.\s*{today.month}\.?"
         elif lang == "en":
-            pattern_str = rf"{weekday},*\s+{month_name}\s+{today.day}\.?"
+            pattern_str = (
+                rf"{weekday},*\s+(?:{month_name}\s+{today.day}\.?|{today.day}\.{today.month}\.?)"
+            )
 
         date_pattern = re.compile(pattern_str, re.IGNORECASE)
         date_element = soup.find(string=date_pattern)
