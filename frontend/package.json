@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@next/third-parties": "^15.4.5",
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "next": "15.4.5",
     "next-intl": "^4.3.4",
     "react": "^19",
