@@ -9,6 +9,7 @@ import {
 import LanguageChanger from "@/components/LanguageChanger";
 import RegionChanger from "@/components/RegionChanger";
 import RestaurantCard from "@/components/RestaurantCard";
+import { routing } from "@/i18n/routing";
 import { getRestaurantData } from "@/lib/restaurants";
 import { defaultRegion, regions } from "@/utils/constants";
 
@@ -39,13 +40,15 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
   };
 };
 
-export const generateStaticParams = async (props: Props) => {
-  const params = await props.params;
+export const generateStaticParams = async () => {
   return regions
     .filter(({ id }) => id !== defaultRegion)
-    .map(({ id }) => {
-      return { locale: params.locale, region: id };
-    });
+    .flatMap(({ id }) =>
+      routing.locales.map((locale) => ({
+        locale,
+        region: id,
+      })),
+    );
 };
 
 const Region = async (props: Props) => {
