@@ -24,7 +24,8 @@ class QueemScraper(RestaurantScraper):
 
         for link in menu_links:
             if today_finnish in link.text:
-                return link["href"]
+                if link.get("href"):
+                    return link["href"]
         return None
 
     def parse_pdf_menu(self, text, lang):
