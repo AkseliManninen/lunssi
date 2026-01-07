@@ -51,12 +51,15 @@ def structure_response(result, requested_name):
             url,
         ) = result
     else:
-        logging.error(f"Error getting lunch info for {name}: {result}")
+        logging.error(f"Error getting lunch info for {requested_name}: {result}")
+        discount = None
+        is_student_cantine = False
         location = "N/A"
         lunch_hours = "N/A"
         lunch_price = "N/A"
         menu = [f"Error: {result}"]
         name = requested_name if requested_name else "Restaurant not found"
+        url = None
 
     return {
         "discount": discount,
