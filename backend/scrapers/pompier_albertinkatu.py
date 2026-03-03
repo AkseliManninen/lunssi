@@ -7,14 +7,18 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
             "Pompier Albertinkatu",
-            "https://pompier.fi/albertinkatu/albertinkatu-menu/",
+            "https://pompier.fi/",
             "https://maps.app.goo.gl/qDBhp7ExBvGfmPUb9",
-            "14 - 19€",
+            "14,50 - 19€",
             "10:45 - 14:00",
         )
 
     def parse_menu(self, soup, lang):
-        accordion_items = soup.find_all("div", class_="fl-accordion-item")
+        accordion_items = [
+            item
+            for item in soup.find_all("div", class_="fl-accordion-item")
+            if item.get("id", "").startswith("albertinkatu-lounas-haitari-")
+        ]
         current_day = datetime.today().weekday()
         menu_details = []
         for item in accordion_items:
