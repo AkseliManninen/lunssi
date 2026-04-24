@@ -8,7 +8,7 @@ class HamisScraper(RestaurantScraper):
             "Hämäläis-Osakunta",
             "https://hys.net/osakuntabaari/ruokalista/",
             "https://maps.app.goo.gl/dUYzeugzayHzYicN7",
-            "2,95€",
+            "3,10€",
             "11:00 - 15:00",
         )
         self.is_student_cantine = True
