@@ -2,9 +2,10 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  output: "export",
   reactStrictMode: true,
-  env: {
-    BACKEND_API_URL: process.env.BACKEND_API_URL,
+  images: {
+    unoptimized: true,
   },
   webpack: (config, { isServer }) => {
     // svgr-support
