@@ -1,18 +1,16 @@
-import axios from "axios";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { cache } from "react";
 import type { RestaurantCardProps } from "@/components/RestaurantCard";
 
 export const getRestaurantData = cache(
   async (locale: string, region: string): Promise<RestaurantCardProps[]> => {
-    const params = new URLSearchParams({
-      lang: locale,
-      region,
-    });
-
-    const restaurantData = await axios
-      .get(`${process.env.BACKEND_API_URL}/restaurants?${params.toString()}`)
-      .then((response) => response.data);
-
-    return restaurantData;
+    const filePath = path.join(
+      process.cwd(),
+      "data",
+      `${region}-${locale}.json`,
+    );
+    const raw = await readFile(filePath, "utf-8");
+    return JSON.parse(raw);
   },
 );

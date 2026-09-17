@@ -1,8 +1,6 @@
 import { defaultRegion } from "@/utils/constants";
 import Region from "./[region]/page";
 
-export const revalidate = 21600;
-
 type Props = {
   params: Promise<{ locale: string }>;
 };

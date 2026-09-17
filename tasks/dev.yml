@@ -3,14 +3,24 @@ version: '3'
 tasks:
   default:
     cmds:
-      - task -p dev:frontend dev:backend
+      - task: data
+      - task: frontend
 
-  backend:
+  # Scrapes all restaurants once and writes frontend/data/*.json.
+  # The frontend reads these files directly instead of calling a live backend.
+  data:
     dir: ./backend
     cmds:
-      - source venv/bin/activate && uvicorn main:app --reload --port 8080
+      - source venv/bin/activate && python generate_static_data.py
 
   frontend:
     dir: ./frontend
     cmds:
       - npx next dev
+
+  # Runs the scraper API for interactively testing a single scraper, e.g.
+  # curl 'http://localhost:8080/restaurant?name=hamis'
+  backend:
+    dir: ./backend
+    cmds:
+      - source venv/bin/activate && uvicorn main:app --reload --port 8080

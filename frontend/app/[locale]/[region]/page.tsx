@@ -13,9 +13,6 @@ import { routing } from "@/i18n/routing";
 import { getRestaurantData } from "@/lib/restaurants";
 import { defaultRegion, regions } from "@/utils/constants";
 
-// 6 hours
-export const revalidate = 21600;
-
 type Props = { params: Promise<{ locale: string; region: string }> };
 
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
