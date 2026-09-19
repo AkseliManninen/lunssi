@@ -6,6 +6,7 @@ for the static-hosting setup.
 import asyncio
 import json
 import logging
+from datetime import date
 from pathlib import Path
 
 from get_lunch_info import get_lunch_info
@@ -75,8 +76,12 @@ async def main():
         for lang in LANGUAGES:
             logging.info(f"Scraping region={region} lang={lang}")
             restaurants = await get_restaurants_for_region(region, lang)
+            data = {
+                "generatedAt": date.today().isoformat(),
+                "restaurants": restaurants,
+            }
             out_path = OUTPUT_DIR / f"{region}-{lang}.json"
-            out_path.write_text(json.dumps(restaurants, ensure_ascii=False, indent=2))
+            out_path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
             logging.info(f"Wrote {out_path}")
 
 

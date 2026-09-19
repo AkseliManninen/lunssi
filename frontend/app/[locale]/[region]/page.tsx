@@ -58,15 +58,33 @@ const Region = async (props: Props) => {
   }
 
   const messages = await getMessages();
+  const t = await getTranslations();
 
-  const restaurants = await getRestaurantData(locale, region);
+  const { generatedAt, restaurants } = await getRestaurantData(locale, region);
+  const date = new Date(generatedAt);
+  const menuDate =
+    locale === "fi"
+      ? new Intl.DateTimeFormat(locale, {
+          weekday: "long",
+          day: "numeric",
+          month: "numeric",
+        }).format(date)
+      : new Intl.DateTimeFormat(locale, {
+          weekday: "long",
+          month: "short",
+          day: "numeric",
+        }).format(date);
+
   return (
     <NextIntlClientProvider messages={messages}>
       <main className="bg-gray-100 pb-8">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+          <h1 className="text-4xl font-bold mb-2 text-center text-gray-800">
             Lunssi
           </h1>
+          <p className="mb-8 text-center text-gray-500">
+            {t("menuFor", { date: menuDate })}
+          </p>
           <div className="mt-8 mb-5 flex justify-end gap-4">
             <RegionChanger currentRegion={region} />
             <LanguageChanger />
