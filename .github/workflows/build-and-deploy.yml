@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-  schedule:
-    # Rebuild once per day, offset from the top of the hour since GitHub
-    # deprioritizes/drops scheduled runs that land exactly on the hour
-    - cron: "13 5 * * *"
   workflow_dispatch:
 
 jobs:
