@@ -6,9 +6,9 @@ class KarljohanScraper(RestaurantScraper):
     def __init__(self):
         super().__init__(
             "Karljohan",
-            "https://www.ravintolakarljohan.fi/lounas-fi/lounas/",
+            "https://www.ravintolakarljohan.fi/lounas-fi/lounas-2/",
             "https://maps.app.goo.gl/eH9CmRTSSFZCRAzh8",
-            "13,70 - 25€",
+            "14 - 25€",
             "10:30 - 15:00",
         )
 

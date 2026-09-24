@@ -49,19 +49,19 @@ class RestaurantScraper:
         return finnish_days[day_index] if lang == "fi" else english_days[day_index]
 
     async def fetch_html_content(self, lang="fi"):
-        async with httpx.AsyncClient(timeout=10) as client:
+        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
             response = await client.get(self.lang_urls[lang], headers=self.headers)
             response.raise_for_status()
             return response.content
 
     async def fetch_json_content(self, lang="fi"):
-        async with httpx.AsyncClient(timeout=10) as client:
+        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
             response = await client.get(self.lang_urls[lang], headers=self.headers)
             response.raise_for_status()
             return response.json()
 
     async def fetch_pdf_content(self, url):
-        async with httpx.AsyncClient(timeout=10) as client:
+        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
             response = await client.get(url, headers=self.headers)
             response.raise_for_status()
             return response.content
