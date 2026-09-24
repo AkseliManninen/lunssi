@@ -9,6 +9,7 @@ from scrapers.pompier_albertinkatu import PompierAlbertinkatuScraper
 from scrapers.puisto import PuistoScraper
 from scrapers.queem import QueemScraper
 from scrapers.stahlberg import StahlbergScraper
+from scrapers.tampella import TampellaScraper
 from scrapers.valssi import ValssiScraper
 
 
@@ -25,5 +26,6 @@ def get_all_scrapers():
         "puisto": PuistoScraper(),
         "queem": QueemScraper(),
         "stahlberg": StahlbergScraper(),
+        "tampella": TampellaScraper(),
         "valssi": ValssiScraper(),
     }
