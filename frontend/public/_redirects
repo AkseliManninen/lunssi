@@ -1,5 +1,6 @@
 # Cloudflare Pages rewrites (200 = keep the URL, serve different content)
 # that replicate the old locale middleware's "default locale has no prefix"
 # behavior, now that the site is a static export with no server/middleware.
-/         /fi         200
-/tampere  /fi/tampere 200
+/              /fi              200
+/jatkasaari    /fi/jatkasaari   200
+/tampere       /fi/tampere      200
