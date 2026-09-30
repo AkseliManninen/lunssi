@@ -12,18 +12,29 @@ class BruuveriScraper(RestaurantScraper):
             "10:30 - 14:30",
         )
 
+    def is_day_heading(self, element, day=None):
+        if element.name != "strong":
+            return False
+        text = element.get_text(strip=True).lower()
+        days = (day,) if day else self.finnish_days
+        return any(text.startswith(d.lower()) for d in days)
+
     def parse_menu(self, soup, lang):
-        day_id = self.get_day_name().lower()
-        day_div = soup.find("div", id=day_id)
-        if day_div is None:
-            return self.fallback_menu[lang]
+        day = self.get_day_name().lower()
+        heading = soup.find(lambda tag: self.is_day_heading(tag, day))
+        if heading is None:
+            return self.menu_fallback[lang]
 
-        list_items = day_div.find_all("li")
-        if list_items:
-            menu_items = [item.get_text(strip=True) for item in list_items]
-        else:
-            desc = day_div.find("div", class_="uagb-ifb-desc")
-            menu_text = desc.get_text(separator="\n", strip=True) if desc else ""
-            menu_items = [line for line in menu_text.split("\n") if line]
+        # Days are either wrapped in a container or flat siblings, so take the
+        # first list after the heading, unless another day heading comes first.
+        menu_items = []
+        for element in heading.next_elements:
+            if getattr(element, "name", None) is None:
+                continue
+            if self.is_day_heading(element):
+                break
+            if element.name == "ul":
+                menu_items = [li.get_text(strip=True) for li in element.find_all("li")]
+                break
 
-        return menu_items if menu_items else self.fallback_menu[lang]
+        return menu_items if menu_items else self.menu_fallback[lang]

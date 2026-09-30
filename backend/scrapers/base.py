@@ -6,6 +6,25 @@ from datetime import datetime
 
 
 class RestaurantScraper:
+    english_days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
+    finnish_days = [
+        "Maanantai",
+        "Tiistai",
+        "Keskiviikko",
+        "Torstai",
+        "Perjantai",
+        "Lauantai",
+        "Sunnuntai",
+    ]
+
     def __init__(self, name, url, location, lunch_price, lunch_hours):
         self.date_str = datetime.now().strftime("%-d.%-m")
         self.discount = {"fi": "", "en": ""}
@@ -27,26 +46,8 @@ class RestaurantScraper:
         self.url = url
 
     def get_day_name(self, lang="fi"):
-        english_days = [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-        ]
-        finnish_days = [
-            "Maanantai",
-            "Tiistai",
-            "Keskiviikko",
-            "Torstai",
-            "Perjantai",
-            "Lauantai",
-            "Sunnuntai",
-        ]
         day_index = datetime.now().weekday()
-        return finnish_days[day_index] if lang == "fi" else english_days[day_index]
+        return self.finnish_days[day_index] if lang == "fi" else self.english_days[day_index]
 
     async def fetch_html_content(self, lang="fi"):
         async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
