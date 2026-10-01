@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 from scrapers.base import RestaurantScraper
 
 
@@ -8,7 +7,7 @@ class FaasaiScraper(RestaurantScraper):
             "Faasai Koskikatu",
             "https://www.faasairavintola.fi/koskikatu.html",
             "https://maps.app.goo.gl/Ec949wqMiJvJX7v4A",
-            "13,50€",
+            "14,00€",
             "11:00 - 15:00",
         )
         self.region = "tampere"
