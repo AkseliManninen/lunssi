@@ -13,7 +13,7 @@ class BruuveriScraper(RestaurantScraper):
         )
 
     def is_day_heading(self, element, day=None):
-        if element.name != "strong":
+        if element.name not in ("strong", "h2", "h3", "h4"):
             return False
         text = element.get_text(strip=True).lower()
         days = (day,) if day else self.finnish_days
@@ -26,7 +26,8 @@ class BruuveriScraper(RestaurantScraper):
             return self.menu_fallback[lang]
 
         # Days are either wrapped in a container or flat siblings, so take the
-        # first list after the heading, unless another day heading comes first.
+        # first list or paragraph after the heading, unless another day heading
+        # comes first. Paragraphs hold one dish per line, separated by <br>.
         menu_items = []
         for element in heading.next_elements:
             if getattr(element, "name", None) is None:
@@ -35,6 +36,9 @@ class BruuveriScraper(RestaurantScraper):
                 break
             if element.name == "ul":
                 menu_items = [li.get_text(strip=True) for li in element.find_all("li")]
+                break
+            if element.name == "p" and element.get_text(strip=True):
+                menu_items = element.get_text("\n", strip=True).split("\n")
                 break
 
         return menu_items if menu_items else self.menu_fallback[lang]
