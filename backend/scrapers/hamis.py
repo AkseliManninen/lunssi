@@ -22,4 +22,4 @@ class HamisScraper(RestaurantScraper):
             menu_items = [BeautifulSoup(item, "html.parser").text for item in menu_items]
             return menu_items
         else:
-            return self.fallback_menu[lang]
+            return self.menu_fallback[lang]

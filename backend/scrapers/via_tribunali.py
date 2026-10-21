@@ -23,7 +23,7 @@ class ViatribunaliScraper(RestaurantScraper):
 
     def parse_menu(self, soup, lang):
         if datetime.date.today().weekday() in CLOSED_WEEKDAYS:
-            return self.fallback_menu.get(lang, [])
+            return self.menu_fallback[lang]
 
         menu_items = []
 
@@ -98,4 +98,4 @@ class ViatribunaliScraper(RestaurantScraper):
 
                 menu_items.append(item_text)
 
-        return menu_items if menu_items else self.fallback_menu.get(lang, [])
+        return menu_items if menu_items else self.menu_fallback[lang]

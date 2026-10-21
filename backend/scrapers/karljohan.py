@@ -19,7 +19,7 @@ class KarljohanScraper(RestaurantScraper):
             current_day = self.get_day_name().lower()
             heading_text = date_heading.text.strip().lower()
             if current_day not in heading_text:
-                return self.fallback_menu[lang]
+                return self.menu_fallback[lang]
 
         menu_items = []
         items = soup.find_all("div", class_="wpr-price-list-item")
@@ -38,4 +38,4 @@ class KarljohanScraper(RestaurantScraper):
 
                 menu_items.append(menu_item)
 
-        return menu_items if menu_items else self.fallback_menu[lang]
+        return menu_items if menu_items else self.menu_fallback[lang]

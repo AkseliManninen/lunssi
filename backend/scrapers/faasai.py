@@ -22,7 +22,7 @@ class FaasaiScraper(RestaurantScraper):
         menu_item = []
 
         if not paragraphs:
-            return self.fallback_menu[lang]
+            return self.menu_fallback[lang]
 
         # Find the paragraph from paragraphs that contains "Perinteinen Faasain thaimaalainen"
         for paragraph in paragraphs:

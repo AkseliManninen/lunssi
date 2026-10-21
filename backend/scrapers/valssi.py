@@ -21,7 +21,7 @@ class ValssiScraper(RestaurantScraper):
             "div", class_="column is-6 is-offset-3 pt-0 pb-0 has-text-centered"
         )
         if not menu_container:
-            return self.fallback_menu[lang]
+            return self.menu_fallback[lang]
         today = datetime.today()
         today_date = today.strftime("%-d.%-m.")
         day_sections = menu_container.find_all("div", class_="", recursive=False)
@@ -49,4 +49,4 @@ class ValssiScraper(RestaurantScraper):
                     if item:
                         menu_items.append(item)
                 return menu_items
-        return self.fallback_menu[lang]
+        return self.menu_fallback[lang]

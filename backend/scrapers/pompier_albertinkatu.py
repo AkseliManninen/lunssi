@@ -28,4 +28,4 @@ class PompierAlbertinkatuScraper(RestaurantScraper):
             menu_items = [BeautifulSoup(item, "html.parser").text for item in menu_items]
             menu_details.append(menu_items)
 
-        return menu_details[current_day] if menu_details[current_day] else self.fallback_menu[lang]
+        return menu_details[current_day] if menu_details[current_day] else self.menu_fallback[lang]

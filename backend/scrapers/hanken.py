@@ -29,7 +29,7 @@ class HankenScraper(RestaurantScraper):
                 break
 
         if not today_menu or not today_menu["SetMenus"]:
-            return self.fallback_menu[lang]
+            return self.menu_fallback[lang]
 
         menu_items = []
         for set_menu in today_menu["SetMenus"]:
@@ -39,7 +39,7 @@ class HankenScraper(RestaurantScraper):
             menu_line = f"{set_menu['Name']}: {', '.join(cleaned_components)}"
             menu_items.append(menu_line)
 
-        return menu_items if menu_items else self.fallback_menu[lang]
+        return menu_items if menu_items else self.menu_fallback[lang]
 
     def get_lunch_info(self, lang="fi", format="json"):
         return super().get_lunch_info(lang, format)

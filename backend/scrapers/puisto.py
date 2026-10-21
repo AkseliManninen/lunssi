@@ -28,13 +28,13 @@ class PuistoScraper(RestaurantScraper):
                 day_header = h
                 break
         if not day_header:
-            return self.fallback_menu[lang]
+            return self.menu_fallback[lang]
 
         container = day_header.find_parent("div")
         while container and not container.find("ul"):
             container = container.find_next_sibling("div")
         if not container:
-            return self.fallback_menu[lang]
+            return self.menu_fallback[lang]
 
         menu_lines = []
         for li in container.find_all("li"):
@@ -45,4 +45,4 @@ class PuistoScraper(RestaurantScraper):
             line = f"{name}: {description}" if description else name
             if line:
                 menu_lines.append(line)
-        return menu_lines if menu_lines else self.fallback_menu[lang]
+        return menu_lines if menu_lines else self.menu_fallback[lang]

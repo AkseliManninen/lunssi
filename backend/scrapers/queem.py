@@ -45,7 +45,7 @@ class QueemScraper(RestaurantScraper):
         if current_item:
             lunch_items.append(" ".join([current_item] + current_lines))
 
-        return lunch_items if lunch_items else self.fallback_menu[lang]
+        return lunch_items if lunch_items else self.menu_fallback[lang]
 
     async def get_lunch_info(self, lang="fi", format="pdf"):
         self.url = await self.get_pdf_url()
