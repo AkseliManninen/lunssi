@@ -103,7 +103,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
           {displayedItems.map((item) => (
             <li key={item} className="flex items-start">
               <span className="text-[#009f77] mr-2">•</span>
-              <span className="text-gray-700">{item}</span>
+              <span className="text-gray-700 min-w-0 break-words">{item}</span>
             </li>
           ))}
         </ul>

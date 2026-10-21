@@ -40,8 +40,8 @@ class KansisScraper(RestaurantScraper):
 
             if parent_div:
                 for p in parent_div.find_all("p"):
-                    menu_text = p.get_text(strip=True)
+                    menu_text = " ".join(p.get_text().split())
                     if menu_text and not date_pattern.search(menu_text):
                         menu_items.append(menu_text)
 
-        return menu_items if menu_items else self.fallback_menu.get(lang, [])
+        return menu_items if menu_items else self.menu_fallback[lang]

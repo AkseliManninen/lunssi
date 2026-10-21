@@ -1,4 +1,5 @@
 import httpx
+import logging
 import pymupdf
 
 from bs4 import BeautifulSoup
@@ -50,19 +51,19 @@ class RestaurantScraper:
         return self.finnish_days[day_index] if lang == "fi" else self.english_days[day_index]
 
     async def fetch_html_content(self, lang="fi"):
-        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
             response = await client.get(self.lang_urls[lang], headers=self.headers)
             response.raise_for_status()
             return response.content
 
     async def fetch_json_content(self, lang="fi"):
-        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
             response = await client.get(self.lang_urls[lang], headers=self.headers)
             response.raise_for_status()
             return response.json()
 
     async def fetch_pdf_content(self, url):
-        async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
+        async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
             response = await client.get(url, headers=self.headers)
             response.raise_for_status()
             return response.content
@@ -99,7 +100,8 @@ class RestaurantScraper:
                 self.name,
                 self.url,
             )
-        except Exception:
+        except Exception as e:
+            logging.warning(f"{self.name} ({lang}) scrape failed: {e!r}")
             return (
                 self.discount[lang],
                 self.is_student_cantine,
