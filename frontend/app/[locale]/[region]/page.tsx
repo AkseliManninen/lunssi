@@ -78,7 +78,7 @@ const Region = async (props: Props) => {
   return (
     <NextIntlClientProvider messages={messages}>
       <main className="bg-gray-100 pb-8">
-        <div className="container mx-auto px-4 py-8">
+        <div className="mx-auto max-w-7xl 2xl:max-w-(--breakpoint-2xl) px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-4xl font-bold mb-2 text-center text-gray-800">
             Lunssi
           </h1>

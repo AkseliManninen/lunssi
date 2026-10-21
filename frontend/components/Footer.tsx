@@ -6,7 +6,7 @@ const Footer = async () => {
 
   return (
     <footer className="bg-gray-100 border-t border-gray-300 py-6">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+      <div className="mx-auto max-w-7xl 2xl:max-w-(--breakpoint-2xl) px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
         <div className="flex items-center space-x-2 text-gray-600">
           <span className="text-sm">
             &copy; {new Date().getFullYear()} {t("contributors")}
