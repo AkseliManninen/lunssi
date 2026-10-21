@@ -4,6 +4,7 @@ from scrapers.hamis import HamisScraper
 from scrapers.hanken import HankenScraper
 from scrapers.kansis import KansisScraper
 from scrapers.karljohan import KarljohanScraper
+from scrapers.meilin import MeilinScraper
 from scrapers.mount_kailash import MountKailashScraper
 from scrapers.plaza import PlazaScraper
 from scrapers.pompier_albertinkatu import PompierAlbertinkatuScraper
@@ -24,6 +25,7 @@ def get_all_scrapers():
         "hanken": HankenScraper(),
         "kansis": KansisScraper(),
         "karljohan": KarljohanScraper(),
+        "meilin": MeilinScraper(),
         "mount_kailash": MountKailashScraper(),
         "plaza": PlazaScraper(),
         "pompier_albertinkatu": PompierAlbertinkatuScraper(),
