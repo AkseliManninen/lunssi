@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type React from "react";
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import ChevronDownIcon from "@/assets/icons/chevron-down.svg";
 import ChevronUpIcon from "@/assets/icons/chevron-up.svg";
 import DiscountIcon from "@/assets/icons/discount.svg";
@@ -19,6 +19,8 @@ export interface RestaurantCardProps {
   url: string;
 }
 
+const MAX_LIST_HEIGHT = 288;
+
 const RestaurantCard: React.FC<RestaurantCardProps> = ({
   discount,
   location,
@@ -31,31 +33,38 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   const t = useTranslations();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const maxCharacters = 300;
+  const listRef = useRef<HTMLUListElement>(null);
+  // Height (px) the collapsed list is clipped to, or null if everything fits.
+  const [collapsedHeight, setCollapsedHeight] = useState<number | null>(null);
 
-  const { displayedItems, needsExpansion } = useMemo(() => {
-    let totalLength = 0;
-    let cutoffIndex = menu.length;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-measure when the menu changes
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
 
-    for (let i = 0; i < menu.length; i++) {
-      totalLength += menu[i].length;
-      if (totalLength > maxCharacters && !isExpanded) {
-        cutoffIndex = i;
-        break;
+    const measure = () => {
+      if (list.scrollHeight <= MAX_LIST_HEIGHT) {
+        setCollapsedHeight(null);
+        return;
       }
-    }
-
-    const onlyOneItem = menu.length === 1;
-
-    return {
-      displayedItems: onlyOneItem
-        ? menu
-        : isExpanded
-          ? menu
-          : menu.slice(0, cutoffIndex),
-      needsExpansion: !onlyOneItem && totalLength > maxCharacters,
+      // Cut at the bottom of the last item that fully fits, keeping at least one.
+      const items = Array.from(list.children) as HTMLElement[];
+      let cutoff = items[0].offsetTop + items[0].offsetHeight;
+      for (const item of items) {
+        const bottom = item.offsetTop + item.offsetHeight;
+        if (bottom > MAX_LIST_HEIGHT) break;
+        cutoff = bottom;
+      }
+      setCollapsedHeight(cutoff < list.scrollHeight ? cutoff : null);
     };
-  }, [menu, isExpanded]);
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [menu]);
+
+  const needsExpansion = collapsedHeight !== null;
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -99,8 +108,15 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
             )}
           </div>
         </h2>
-        <ul className="space-y-2 mb-4">
-          {displayedItems.map((item) => (
+        <ul
+          ref={listRef}
+          className="relative space-y-2 mb-4 overflow-hidden"
+          style={{
+            maxHeight:
+              needsExpansion && !isExpanded ? collapsedHeight : undefined,
+          }}
+        >
+          {menu.map((item) => (
             <li key={item} className="flex items-start">
               <span className="text-[#009f77] mr-2">•</span>
               <span className="text-gray-700 min-w-0 break-words">{item}</span>
