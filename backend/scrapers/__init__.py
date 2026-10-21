@@ -1,3 +1,4 @@
+from scrapers.bierhaus import BierhausScraper
 from scrapers.bruuveri import BruuveriScraper
 from scrapers.faasai import FaasaiScraper
 from scrapers.hamis import HamisScraper
@@ -6,7 +7,6 @@ from scrapers.kansis import KansisScraper
 from scrapers.karljohan import KarljohanScraper
 from scrapers.meilin import MeilinScraper
 from scrapers.mount_kailash import MountKailashScraper
-from scrapers.plaza import PlazaScraper
 from scrapers.pompier_albertinkatu import PompierAlbertinkatuScraper
 from scrapers.puisto import PuistoScraper
 from scrapers.queem import QueemScraper
@@ -19,6 +19,7 @@ from scrapers.via_tribunali import ViatribunaliScraper
 
 def get_all_scrapers():
     return {
+        "bierhaus": BierhausScraper(),
         "bruuveri": BruuveriScraper(),
         "faasai": FaasaiScraper(),
         "hamis": HamisScraper(),
@@ -27,7 +28,6 @@ def get_all_scrapers():
         "karljohan": KarljohanScraper(),
         "meilin": MeilinScraper(),
         "mount_kailash": MountKailashScraper(),
-        "plaza": PlazaScraper(),
         "pompier_albertinkatu": PompierAlbertinkatuScraper(),
         "puisto": PuistoScraper(),
         "queem": QueemScraper(),
